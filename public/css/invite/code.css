@@ -1,0 +1,5 @@
+#INVITE { background-color: #edf9f7; min-height: 100vh; padding: 20px; }
+.invite-logo { margin-top: 114px; text-align: center; }
+.invite-title { margin-top: 32px; text-align: center; font-size: 26px; font-weight: 500; line-height: 1.38; letter-spacing: -0.26px; }
+.invite-description { margin-top: 16px; text-align: center; font-size: 14px; line-height: 1.5; letter-spacing: -0.14px; }
+.invite-store-wrap { position: fixed; bottom: 150px; text-align: center; }

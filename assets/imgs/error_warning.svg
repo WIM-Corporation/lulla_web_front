@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34">
+    <g data-name="그룹 3905">
+        <g data-name="타원 468" transform="rotate(180 17 17)" style="stroke:#ff4500;stroke-width:2px;fill:none">
+            <circle cx="17" cy="17" r="17" style="stroke:none"/>
+            <circle cx="17" cy="17" r="16" style="fill:none"/>
+        </g>
+        <g data-name="그룹 3886">
+            <g data-name="그룹 3885">
+                <path data-name="사각형 3245" transform="rotate(180 9 12.5)" style="fill:#ff4500" d="M0 0h2v2H0z"/>
+                <path data-name="사각형 3244" transform="rotate(180 9 10)" style="fill:#ff4500" d="M0 0h2v10H0z"/>
+            </g>
+        </g>
+    </g>
+</svg>

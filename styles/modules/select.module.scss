@@ -1,0 +1,91 @@
+/* ------------------------ 역할 설정 ------------------------ */
+
+.role_hd {
+  padding-top: 248px;
+  padding-bottom: 36px;
+}
+
+.role_hd2 {
+  padding-top: 248px;
+  padding-bottom: 72px;
+}
+
+.role_btn {
+  width: 100%;
+  height: auto;
+  display: block;
+  padding: 14px 0;
+  border-radius: 4px;
+  line-height: 1.5;
+  letter-spacing: -0.08px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray900);
+  background-color: var(--teal50);
+}
+
+.accept_info {
+  margin-bottom: 15px;
+  line-height: 1.5;
+  letter-spacing: -0.07px;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--gray-500);
+}
+
+.role_slide_box {
+  position: relative;
+  width: 378px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.box_size_slide {
+  width: 100%;
+  height: auto;
+}
+
+.side_arrow {
+  position: absolute;
+  bottom: 213px;
+  left: 0;
+  width: 100%;
+  height: auto;
+}
+
+.prev_btn {
+  cursor: pointer;
+  position: absolute;
+  left: -144px;
+}
+
+.next_btn {
+  cursor: pointer;
+  position: absolute;
+  right: -144px;
+}
+
+.page_dot {
+  width: 100%;
+  height: auto;
+  margin-top: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 16px;
+}
+
+.dot_item {
+  cursor: pointer;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--gray100);
+
+  &.active {
+    background-color: var(--gray700);
+  }
+}
+
+/* ------------------------ // 역할 설정 ------------------------ */

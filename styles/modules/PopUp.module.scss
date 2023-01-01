@@ -1,0 +1,260 @@
+/* ------------------------ 팝업 ------------------------ */
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  background-color: var(--black-oapcity-500);
+  z-index: 3;
+  overflow-y: auto;
+}
+
+.popup_box {
+  width: 378px;
+  height: auto;
+  padding: 32px 16px 16px;
+  border-radius: 4px;
+  background-color: var(--white);
+}
+.popup_text {
+  margin-bottom: 32px;
+  text-align: center;
+  line-height: 1.5;
+  letter-spacing: -0.08px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--gray900);
+}
+.popup_chk {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-flow: column nowrap;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  grid-gap: 12px;
+  padding-top: 16px;
+}
+.popup_btn {
+  width: 100%;
+  height: auto;
+  padding: 14px 0;
+  border-radius: 4px;
+  line-height: 1.5;
+  letter-spacing: -0.08px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+}
+.popup_bigbtn {
+  width: 100%;
+  height: auto;
+  padding: 14px 0;
+  border-radius: 4px;
+  line-height: 1.5;
+  letter-spacing: -0.08px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+}
+.close_btn {
+  color: var(--gray700);
+  background-color: var(--gray50);
+}
+.login_btn {
+  color: var(--white);
+  background-color: var(--teal-400-primary);
+}
+.login_btn:hover {
+  background-color: var(--teal500);
+}
+.cancel_btn {
+  color: var(--gray700);
+  background-color: var(--gray50);
+}
+.back_btn {
+  color: var(--gray700);
+  background-color: var(--gray50);
+}
+.ok_btn {
+  color: var(--white);
+  background-color: var(--teal-400-primary);
+}
+.ok_btn:hover {
+  background-color: var(--teal500);
+}
+.sns_marke img {
+  vertical-align: sub;
+}
+
+/* 약관 및 개인정보 팝업 */
+.privacy_box {
+  width: 582px;
+  max-height: 712px;
+  padding: 40px;
+  overflow: hidden;
+}
+.privacy_hd {
+  position: relative;
+  width: 100%;
+  height: auto;
+  padding-bottom: 16px;
+}
+.privacy_title {
+  line-height: 1.5;
+  letter-spacing: -0.24px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--gray900);
+}
+.popup_close {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.privacy_body {
+  width: 100%;
+  height: 480px;
+  overflow-y: auto;
+}
+.privacy_cont {
+  width: 100%;
+  height: auto;
+  margin-bottom: 32px;
+}
+.privacy_subtitle {
+  margin-bottom: 15px;
+  line-height: 1.75;
+  letter-spacing: -0.08px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray900);
+}
+.privacy_text {
+  line-height: 1.71;
+  letter-spacing: -0.07px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--gray900);
+}
+/* 내계정 -> 계정삭제(원장) */
+.rep_popup {
+  padding: 16px;
+}
+.popup_imgbox {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  margin-bottom: 16px;
+}
+/* 내 계정 -> 회원, 선생 등 */
+.popup_hd {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+.popup_title {
+  padding: 6px 0 20px;
+  line-height: 1.5;
+  letter-spacing: -0.2px;
+  text-align: center;
+  font-size: 20px;
+  color: var(--gray900);
+}
+.delet_info {
+  margin-bottom: 12px;
+  display: flex;
+  text-align: left;
+  font-size: 14px;
+  grid-gap: 6px;
+}
+.line_box {
+  width: 100%;
+  height: 1px;
+  background-color: var(--gray100);
+}
+.delet_ok {
+  width: 100%;
+}
+.delet_ok.disabled {
+  cursor: default;
+  color: var(--red100);
+  background-color: var(--red50) !important;
+}
+.delet_chk {
+  position: relative;
+  width: auto;
+  height: auto;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  grid-gap: 10px;
+}
+.delet_chk::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  border-radius: 50px;
+  border: 1px solid var(--gray200);
+  background-color: var(--white);
+  order: 2;
+}
+.delet_chk label {
+  line-height: 1.5;
+  letter-spacing: -0.07px;
+  font-size: 14px;
+  color: var(--gray900);
+  order: 1;
+}
+.delet_chk label::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 3px;
+  right: 28px;
+  cursor: pointer;
+  border-radius: 50px;
+}
+.delet_chk label:after {
+  content: "";
+  width: 9px;
+  height: 6px;
+  position: absolute;
+  top: 6px;
+  right: 33px;
+  border: solid var(--gray200);
+  border-width: 0 0 1px 1px;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+/* .delet_chk label:hover::after {
+	opacity: 0.3;
+} */
+.delet_chk input[type="checkbox"]:checked + label::before {
+  top: 0px;
+  right: 27px;
+  background-color: var(--teal-400-primary);
+  border: 1px solid var(--teal-400-primary);
+}
+.delet_chk input[type="checkbox"]:checked + label::after {
+  border-color: var(--white);
+}
+.delet_pwd {
+  width: 100%;
+  height: auto;
+  margin-bottom: 16px;
+}
+.delet_warring {
+  padding: 8px 0 0;
+}
