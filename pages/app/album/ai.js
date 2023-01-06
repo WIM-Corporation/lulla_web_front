@@ -152,8 +152,6 @@ function Album() {
         Accept: "*/*",
         "Content-Type": "application/json",
       },
-      maxContentLength: 100000000,
-      maxBodyLength: 100000000,
     })
       .then(({ data: respData }) => {
         // 로딩 끝내고
@@ -840,12 +838,13 @@ function Album() {
                   imgSrc={imgSrc}
                 />
               </div>
-              {WarnPopup(
-                cancelPopup,
-                "모든 사진에 태그된 정보가 사라집니다",
-                leaveWarnPopup,
-                handleBackPress
-              )}
+
+              <WarnPopup
+                show={cancelPopup}
+                title={"모든 사진에 태그된 정보가 사라집니다"}
+                onClose={leaveWarnPopup}
+                onConfirm={handleBackPress}
+              />
               {SimplePopup(deletePopup, leaveDeletePopup, deleteCurrentImg)}
             </main>
           </div>

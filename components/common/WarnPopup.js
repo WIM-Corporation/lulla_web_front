@@ -3,7 +3,7 @@ import warningIcon from "@/assets/imgs/error_warning.svg";
 import styles from "@/styles/modules/WarnPopUp.module.scss";
 
 /* TODO: refactoring set interface for title + cb*/
-export default function WarnPopup(show, title, onClose, onConfirm) {
+export default function WarnPopup({ show, title, onClose, onConfirm }) {
   return (
     <>
       <div className="Wrap" hidden={!show}>
