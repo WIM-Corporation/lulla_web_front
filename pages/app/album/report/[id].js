@@ -9,12 +9,16 @@ import { initPage, back } from "@/components/App/Album/nativeCalls";
 import { dummyReportData } from "@/components/App/Album/Common/Test";
 import { ReportContainer } from "@/components/App/Album/TagError/TagErrorPage";
 import { errMsg } from "@/components/common/Utils";
+import qs from "qs";
 
 export default function ReportPage() {
-  const isWebTestMode = true;
+  const isWebTestMode = false;
 
-  const reportId = useRouter().query.id;
-  const deviceType = useRouter().query.type;
+  const reportId = location.pathname.substring(
+    location.pathname.lastIndexOf("/") + 1
+  );
+  const deviceType =
+    qs.parse(location.search, { ignoreQueryPrefix: true })?.type || "web";
 
   const [report, setReport] = useState(null);
   const auth = useRef(null);
@@ -41,9 +45,7 @@ export default function ReportPage() {
         return res;
       })
       .catch((err) => {
-        alert(
-          errMsg("태그 오류 정보를 불러오는데 문제가 발생하였습니다. ", err)
-        );
+        alert("태그 오류 정보를 불러오는데 문제가 발생하였습니다. ");
         console.log("[getReport] error : ", err.message);
         if (isWebTestMode) {
           return dummyReportData;
@@ -56,27 +58,27 @@ export default function ReportPage() {
 
   useEffect(() => {
     initPage(deviceType, auth);
+
+    let _initWait = setInterval(() => {
+      if (auth.current.token && reportId) {
+        clearInterval(_initWait);
+        getReportProps(auth.current.memberId, reportId).then((res) => {
+          setReport(res);
+        });
+      }
+    }, 500);
+    setTimeout(() => clearInterval(_initWait), 5000);
   }, []);
-
-  useEffect(() => {
-    getReportProps(auth.current.memberId, reportId).then((res) => {
-      setReport(res);
-    });
-
-    // check data
-  }, [auth]);
 
   return (
     <div className="Wrap">
-      {auth.current && report ? (
-        <main>
-          <AlbumHeader
-            onBackBtn={() => back(deviceType)}
-            title={"태그 오류 알림"}
-          />
-          <ReportContainer report={report} />
-        </main>
-      ) : null}
+      <main>
+        <AlbumHeader
+          onBackBtn={() => back(deviceType)}
+          title={"태그 오류 알림"}
+        />
+        {auth.current && report ? <ReportContainer report={report} /> : null}
+      </main>
     </div>
   );
 }

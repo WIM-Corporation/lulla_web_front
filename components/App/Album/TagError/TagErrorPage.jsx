@@ -11,7 +11,7 @@ export const ReportContainer = ({ report, onWrite }) => {
   const [tagList, setTagList] = useState([]);
   const textRef = useRef(null);
 
-  async function getKidList(school_id, class_id) {
+  async function getKidList(school_id, class_id, tag_list) {
     await axios({
       method: "post",
       headers: { "Content-Type": `application/json` },
@@ -36,7 +36,7 @@ export const ReportContainer = ({ report, onWrite }) => {
         }, {});
 
         // tag update
-        const updatedTags = tagList.map((tag) => {
+        const updatedTags = tag_list.map((tag) => {
           tag.kid_thumb_url = kid_map[tag.kid_id]?.kid_thumb_url;
           tag.class_name = class_name;
           return tag;
@@ -53,7 +53,7 @@ export const ReportContainer = ({ report, onWrite }) => {
   useEffect(() => {
     console.log("init tagerrorpage", report);
     setTagList(report.media.tags);
-    getKidList(report.schoolId, report.classId);
+    getKidList(report.schoolId, report.classId, report.media.tags);
   }, []);
 
   return (

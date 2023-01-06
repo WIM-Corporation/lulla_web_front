@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useRef, useState, useEffect } from "react";
 
 import AlbumHeader from "@/components/App/Album/Common/AlbumHeader";
@@ -9,12 +8,14 @@ import WarnPopup from "@/components/common/WarnPopup";
 import { ReportContainer } from "@/components/App/Album/TagError/TagErrorPage";
 import { errMsg } from "@/components/common/Utils";
 import { Report } from "@/service/album/Report";
+import qs from "qs";
 
 // TODO: ts or set prototype, 분리
 export default function ReportCreatePage() {
-  const isWebTestMode = true;
+  const isWebTestMode = false;
   const [activeSendBtn, setSendBtnActive, activeSendBtnRef] = useState(false);
-  const deviceType = useRouter().query.type || "web";
+  const deviceType =
+    qs.parse(location.search, { ignoreQueryPrefix: true })?.type || "web";
 
   const [ready, setReady] = useState(false);
   const auth = useRef(null);
@@ -24,9 +25,12 @@ export default function ReportCreatePage() {
 
   const sendError = (e) => {
     // report.current.content = textRef.current.value;
-    console.log("[sendError] report : ", report.current.output);
+    let reqBody = report.current.output;
+    reqBody.media = [reqBody.media];
+    console.log("[sendError] report : ", reqBody);
+
     axios
-      .post("/api/v1/album/error/create", report.current.output)
+      .post("/api/v1/album/error/create", reqBody)
       .then((res) => {
         back(deviceType);
       })
