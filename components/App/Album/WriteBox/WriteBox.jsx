@@ -1,14 +1,33 @@
 import { forwardRef, useCallback, useEffect, useState } from "react";
 import EmptyBox from "@/assets/imgs/empty_box.svg";
 import Image from "next/image";
+const parseDate = (dateStr) => {
+  if (!dateStr) return "";
+
+  let date = new Date(dateStr);
+  const y = date.getFullYear();
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  const h = date.getHours();
+  const apm = h < 12 ? "오전" : "오후";
+  const hrs = h < 12 ? h : h - 12;
+  const min = date.getMinutes();
+
+  const t = (v) => {
+    return v < 10 ? `0${v}` : v;
+  };
+
+  return `${t(y)}-${t(m)}-${t(d)} ${apm} ${t(hrs)}:${t(min)}`;
+};
 
 export const WriteBox = forwardRef(
-  ({ initText, onInput, reporter }, textRef) => {
+  ({ initText, onInput, reporter, onClick }, textRef) => {
     const [texts, setTexts] = useState(null);
 
     useEffect(() => {
+      console.log("initText ", initText);
       initText ? setTexts(initText) : null;
-    }, []);
+    }, [initText]);
 
     const onInputEvent = useCallback(() => {
       console.log("textRef.current.scrollHeight", textRef.current.scrollHeight);
@@ -49,17 +68,15 @@ export const WriteBox = forwardRef(
                 src={reporter.profile || EmptyBox}
               />
             </span>
-            <span className="name_box">
-              {reporter.class_name + " " + reporter.name}
-            </span>
-            <span className="time_box">{reporter.created_time}</span>
+            <span className="name_box">{reporter.name}</span>
+            <span className="time_box">{parseDate(reporter.created_at)}</span>
           </div>
         ) : null}
         <textarea
           ref={textRef}
           className="text_area"
           rows={1}
-          placeholder="오류 사항을 입력하세요"
+          placeholder={initText ? undefined : "오류 사항을 입력하세요"}
           onInput={onInputEvent}
           onBlur={() => {
             document.getElementsByClassName("Wrap")[0].scrollIntoView();
@@ -68,7 +85,12 @@ export const WriteBox = forwardRef(
         >
           {initText}
         </textarea>
-        {reporter ? <div className="lower_btn"> 태그 수정 </div> : null}
+        {reporter ? (
+          <div className="lower_btn" onClick={onClick}>
+            {" "}
+            태그 수정{" "}
+          </div>
+        ) : null}
       </div>
     );
   }

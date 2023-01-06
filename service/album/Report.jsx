@@ -3,6 +3,7 @@ export function Report() {}
 Report.prototype = {
   initReport: null,
   output: null,
+  reporter: null,
 
   set init(value) {
     /* Check data invalid */
@@ -30,8 +31,10 @@ Report.prototype = {
       school_id: value.school_id,
       total_medias: value.total_medias,
       is_confirmed: false,
-      content: null,
+      content: value.content,
       media: value.media,
+      created_at: value.created_at,
+      is_confirmed: value.is_confirmed || false,
     };
   },
 
@@ -61,5 +64,14 @@ Report.prototype = {
 
   get media() {
     return this.output?.media;
+  },
+
+  set setReporter(value) {
+    // parse rsMember info
+    this.reporter = {
+      profile: value.member_image,
+      name: value.member_nickname,
+      created_at: this.output?.created_at,
+    };
   },
 };
