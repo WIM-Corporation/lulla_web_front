@@ -10,6 +10,7 @@ export const ReportContainer = ({ report, onWrite }) => {
   const [tagListPopup, showTagList] = useState(false);
   const [tagList, setTagList] = useState([]);
   const textRef = useRef(null);
+  const [ready, setReady] = useState(false);
 
   async function getKidList(school_id, class_id, tag_list) {
     await axios({
@@ -54,29 +55,37 @@ export const ReportContainer = ({ report, onWrite }) => {
     console.log("init tagerrorpage", report);
     setTagList(report.media.tags);
     getKidList(report.schoolId, report.classId, report.media.tags);
+    setReady(true);
   }, []);
 
   return (
     <>
-      <ViewBox
-        mediaArray={[report.media]}
-        total={report.totalMedias}
-        idx={0}
-        onClickTagInfo={() => showTagList(true)}
-      />
-      <WriteBox
-        ref={textRef}
-        initText={report.content}
-        reporter={report?.reporter}
-        onInput={onWrite}
-      ></WriteBox>
-      <div
-        className={`overlay ${tagListPopup ? "show" : ""}`}
-        onClick={() => showTagList(false)}
-      />
-      <div className={`tag_list ${tagListPopup ? "show" : ""}`}>
-        <TagListPopup tags={tagList} />
-      </div>
+      {ready ? (
+        <>
+          <ViewBox
+            mediaArray={[report.media]}
+            total={report.totalMedias}
+            idx={0}
+            onClickTagInfo={() => showTagList(true)}
+          />
+          <WriteBox
+            ref={textRef}
+            initText={report.output.content}
+            reporter={report.reporter}
+            onInput={onWrite}
+            onClick={() =>
+              alert("태그 수정은 현재 개발 중입니다. 관리자에게 문의해주세요.")
+            }
+          ></WriteBox>
+          <div
+            className={`overlay ${tagListPopup ? "show" : ""}`}
+            onClick={() => showTagList(false)}
+          />
+          <div className={`tag_list ${tagListPopup ? "show" : ""}`}>
+            <TagListPopup tags={tagList} />
+          </div>
+        </>
+      ) : null}
     </>
   );
 };
