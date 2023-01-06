@@ -107,6 +107,8 @@ export const dummyErrorImageData = {
   media: {
     seq: 2 /* 10번째 중 3번째 사진 오류 보내기 */,
     data: testImageData2,
+    image_url:
+      "https://s3lulla.s3.ap-northeast-2.amazonaws.com/lulla_1671903341159__9594__.jpg",
     width: -1,
     height: -1,
     is_deleted: false,
@@ -130,6 +132,50 @@ export const dummyErrorImageData = {
     ],
   },
 };
+
+export const dummyReportData = {
+  album_id: "aaa",
+  school_id: "57c040b0-2fed-11ec-819b-0242ac110003",
+  class_id: "95c86cb2-7006-11ec-b270-0242ac110003",
+  total_medias: 10,
+  report_id: "reporttest",
+  reporter: {
+    name: "홍길동",
+    class_name: "햇님반",
+    profile:
+      "https://s3lulla.s3.ap-northeast-2.amazonaws.com/thumb_1641728516061__3141__.jpg",
+  },
+  created_time: "2001-01-01T01:01:01.247Z",
+  is_confirmed: false,
+  content: "오류 리포트입니다. ",
+  media: {
+    seq: 2 /* 10번째 중 3번째 사진 오류 보내기 */,
+    image_url:
+      "https://s3lulla.s3.ap-northeast-2.amazonaws.com/lulla_1671903341159__9594__.jpg",
+    width: -1,
+    height: -1,
+    is_deleted: false,
+    tags: [
+      {
+        kid_id: "407119b2-7141-11ec-9f4b-0242ac110003",
+        kid_name: "홍길동",
+        class_id: "95c86cb2-7006-11ec-b270-0242ac110003",
+        class_name: "포도반",
+        bbox: [300, 100, 500, 350],
+        by_user: true,
+      },
+      {
+        kid_id: "583bef38-9165-11ec-821f-0af154999872",
+        kid_name: "또치",
+        class_id: "95c86cb2-7006-11ec-b270-0242ac110003",
+        class_name: "포도반",
+        bbox: [485, 280, 740, 500],
+        by_user: true,
+      },
+    ],
+  },
+};
+
 export const dummyKidList = {
   resultCode: 1,
   message: "OK",

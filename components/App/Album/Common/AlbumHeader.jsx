@@ -6,17 +6,14 @@ import leftArrow from "@/assets/imgs/back_left.svg";
 import closeX from "@/assets/imgs/close_line_white.svg";
 import xBtn1 from "@/assets/imgs/x_btn.png";
 
-import WarnPopup from "@/components/common/WarnPopup";
-import { backToNative } from "@/components/common/Utils";
-
-export default function AlbumHeader({
+export const AlbumHeaderComponent = ({
   onConfirm,
   onBackBtn,
   title,
   activeBtn,
   backBtnType,
   infoBtn,
-}) {
+}) => {
   const [infoVisible, setInfoVisible] = useState(false);
 
   return (
@@ -76,4 +73,8 @@ export default function AlbumHeader({
       </header>
     </>
   );
+};
+
+export default function AlbumHeader(props) {
+  return AlbumHeaderComponent(props);
 }
