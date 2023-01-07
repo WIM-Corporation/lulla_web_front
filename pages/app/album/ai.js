@@ -18,11 +18,12 @@ import TestBtnCombo, {
   dummyAITagResponse,
   dummyFromNativeData,
   dummyKidList,
+  testVideoData,
 } from "@/components/App/Album/Common/Test";
 
 function Album() {
   const router = useRouter();
-  const isWebTestMode = false;
+  const isWebTestMode = true;
   const imgAreaBox = useRef(null);
 
   const [kidList, setKidList, kidListRef] = useState([]);
@@ -281,10 +282,9 @@ function Album() {
         data.medias[0].mime_type.startsWith("video")
       ) {
         src = data.medias[0].video_path;
-        alert("비디오 타입은 현재 지원하지 않습니다.");
+        setIsVideo(true);
         setImgSrc(src);
         setMediaType(data.medias[0].mime_type);
-        setIsVideo(true);
       } else {
         setIsVideo(false);
         setMediaType(null);
@@ -620,15 +620,15 @@ function Album() {
       imageArrayRef.current[index].mime_type.startsWith("video")
     ) {
       src = imageArrayRef.current[index].video_path;
+      setIsVideo(true);
       setImgSrc(src);
       setCurrentIdx(index);
-      setIsVideo(true);
       setMediaType(imageArrayRef.current[index].mime_type);
       setTags([]);
     } else {
+      setIsVideo(false);
       setImgSrc(parseImageSrc(imageArrayRef.current[index]));
       setCurrentIdx(index);
-      setIsVideo(false);
       setMediaType(null);
       startAiProc(
         schoolId,
@@ -749,11 +749,7 @@ function Album() {
       }}
     >
       {isWebTestMode && (
-        <TestBtnCombo
-          testData={dummyFromNativeData}
-          onClick={initDataset}
-          jsonData
-        />
+        <TestBtnCombo testData={testVideoData} onClick={initDataset} jsonData />
       )}
       {onLoadFlag.current && (
         <>
