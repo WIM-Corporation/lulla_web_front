@@ -23,7 +23,7 @@ import TestBtnCombo, {
 
 function Album() {
   const router = useRouter();
-  const isWebTestMode = true;
+  const isWebTestMode = false;
   const imgAreaBox = useRef(null);
 
   const [kidList, setKidList, kidListRef] = useState([]);
