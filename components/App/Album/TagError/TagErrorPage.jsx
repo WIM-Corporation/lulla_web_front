@@ -70,7 +70,7 @@ export const ReportContainer = ({ report, onWrite }) => {
           />
           <WriteBox
             ref={textRef}
-            initText={report.output.content}
+            initText={report.initText}
             reporter={report.reporter}
             onInput={onWrite}
             onClick={() =>

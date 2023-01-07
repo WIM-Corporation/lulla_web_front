@@ -133,6 +133,35 @@ export const dummyErrorImageData = {
   },
 };
 
+export const testVideoData = {
+  class_id: "ebf482d4-7ec3-11ed-a9d4-cd2ce832d934",
+  deleted_medias_seq: [],
+  medias: [
+    {
+      duration: 1.3332,
+      video_path:
+        "https://s3lulla.s3.ap-northeast-2.amazonaws.com/lulla_1673072399704__9217__.mp4",
+      height: 1920,
+      mime_type: "video/mp4",
+      is_deleted: false,
+      seq: 0,
+      width: 1080,
+    },
+    {
+      image_url:
+        "https://s3lulla.s3.ap-northeast-2.amazonaws.com/lulla_1673072481625__7440__.jpg",
+      tags: [],
+      height: 485,
+      is_deleted: false,
+      mime_type: "image/png",
+      seq: 1,
+      width: 638,
+    },
+  ],
+  school_id: "e000a14c-7ec3-11ed-a9d4-cd2ce832d934",
+  total_medias: 2,
+};
+
 export const dummyReportData = {
   album_id: "aaa",
   school_id: "57c040b0-2fed-11ec-819b-0242ac110003",

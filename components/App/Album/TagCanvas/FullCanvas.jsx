@@ -26,8 +26,8 @@ export default function FullCanvas({
     const ctx = viewBox.current.getContext("2d");
     let dx = 0;
     let dy = 0;
-    let newWidth = img.naturalWidth;
-    let newHeight = img.naturalHeight;
+    let newWidth = img.naturalWidth || img.width;
+    let newHeight = img.naturalHeight || img.height;
 
     if (!newWidth || !newHeight) {
       console.error(

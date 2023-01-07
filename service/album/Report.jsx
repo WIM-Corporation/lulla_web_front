@@ -38,6 +38,10 @@ Report.prototype = {
     };
   },
 
+  get initText() {
+    return this.initReport?.content;
+  },
+
   set content(value) {
     this.output.content = value;
   },
