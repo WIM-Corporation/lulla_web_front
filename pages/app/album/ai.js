@@ -665,14 +665,12 @@ function Album() {
   );
 
   const handleTagDelClick = useCallback(
-    (selected, idx) => {
+    (selected) => {
       // kid 수정
-      let newImage = imageArray;
-      let newTag = tags.filter((v,i) => i !== idx)
-      newImage[currentIdx].tags = newTag;
-
-      setImageArray(newImage);
-      setTags(newTag);
+      const selectedIdx = tags.findIndex(tag => (JSON.stringify(selected.bbox)==JSON.stringify(tag.bbox)))
+      const newTags = tags.filter((tag,idx) => (idx!==selectedIdx))
+      imageArrayRef.current[currentIdx].tags = newTags
+      setTags(newTags)
       setInitEditKid(selected);
       setImgSrc(null);
       setDrawTag(false);

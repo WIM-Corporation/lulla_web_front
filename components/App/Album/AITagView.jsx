@@ -48,7 +48,7 @@ export default function AITagView({
                 />
                 <span
                   className="tag_del"
-                  onClick={() => handleTagDelClick(tag,i)}
+                  onClick={() => handleTagDelClick(tag)}
                 >
                   <Image src={circleX} />
                 </span>
