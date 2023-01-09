@@ -17,6 +17,7 @@ export default function DraggableTag({
 }) {
   const [rectPosition, setRectPosition] = useState(null);
   const [boxStyle, setBoxStyle] = useState(null);
+  const centerYX = useRef([(top+bottom)/2, (right+left)/2])
 
   const startDrag = (e) => {
     if (!draggable) {
@@ -38,11 +39,12 @@ export default function DraggableTag({
 
       const _width = rectPosition[2] - rectPosition[0];
       const _height = rectPosition[3] - rectPosition[1];
-      const _top = startY - _height / 2;
-      const _left = startX - _width / 2;
+      const _top = centerYX.current[0] - (_height / 2) + deltaY;
+      const _left = centerYX.current[1] - (_width / 2) + deltaX;
       const _right = _left + _width;
       const _bottom = _top + _height;
 
+      centerYX.current=[centerYX.current[0]+deltaY,centerYX.current[1]+deltaX]
       const newBbox = [_left, _top, _right, _bottom];
 
       setBoxStyle({
@@ -110,7 +112,7 @@ export default function DraggableTag({
         left: _left,
         top: _top,
       });
-
+      centerYX.current=[(_top+_bottom)/2,(_left+_right)/2]
       onResize(_rectPosition, type);
     };
 
