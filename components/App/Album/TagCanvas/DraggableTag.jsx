@@ -51,7 +51,8 @@ export default function DraggableTag({
         left: _left,
         top: _top,
       });
-      // console.log("[startDrag.onMove] setBoxStyle : ", newBbox);
+      setRectPosition(newBbox)
+
       onDrag(deltaX, deltaY, newBbox);
     };
     const onUp = (e) => {

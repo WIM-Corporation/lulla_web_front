@@ -457,7 +457,7 @@ function Album() {
           leaveDeletePopup();
           break;
         case "editMode":
-          leaveEditMode(imageArray[currentIdx]);
+          leaveEditMode(imageArrayRef.current[currentIdxRef.current]);
           break;
         default:
           window.app.cancel();
@@ -481,7 +481,7 @@ function Album() {
   useEffect(() => {
     if (Array.isArray(tags) && imageArray.length > 0) {
       console.log("[useEffect] Tags", tags, "CurrentIdx ", currentIdx);
-      let newImageArray = imageArray;
+      let newImageArray = imageArrayRef.current;
       for (let i = 0; i < tags.length; i++) {
         const newTag = {
           kid_id: tags[i].kid_id,
@@ -508,7 +508,6 @@ function Album() {
       //refactoring need
       setTagComplete(true);
       checkAllTagged(newImageArray);
-      setImageArray(Object.assign([], newImageArray));
     }
   }, [tags]);
 
@@ -536,7 +535,7 @@ function Album() {
       class_id: classId,
       total_medias: totalMedias,
       medias: finalImageArray,
-      deleted_medias_seq: deletedMediasSeq,
+      deleted_medias_seq: deletedMediasSeq.sort(),
     });
 
     console.log("[handleComplete] 완료 : ", resultJsonStr);
@@ -641,10 +640,8 @@ function Album() {
       );
 
       // isTagged
-      let newImageArray = imageArray;
-      newImageArray[index].isTagged = true;
-      checkAllTagged(newImageArray);
-      setImageArray(Object.assign([], newImageArray));
+      imageArrayRef.current[index].isTagged = true;
+      checkAllTagged(imageArrayRef.current);
 
       setTags(imageArrayRef.current[index].tags);
     }
@@ -671,9 +668,7 @@ function Album() {
     (selected, idx) => {
       // kid 수정
       let newImage = imageArray;
-      let newTag = selected.kid_id
-        ? tags.filter((v) => v.kid_id !== selected.kid_id)
-        : tags.filter((v, i) => i !== idx);
+      let newTag = tags.filter((v,i) => i !== idx)
       newImage[currentIdx].tags = newTag;
 
       setImageArray(newImage);
@@ -812,7 +807,7 @@ function Album() {
                       {imageArray.length > 0 && (
                         <CountView
                           current={1 + currentIdx}
-                          total={imageArray.length}
+                          total={totalMedias}
                         />
                       )}
                       {drawTag ? (
