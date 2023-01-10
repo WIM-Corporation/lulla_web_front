@@ -298,48 +298,44 @@ export default function EditorView({
 
   return (
     <>
-      <div className="Wrap">
-        <main>
-          <AlbumHeader onBackBtn={editOnCancel} backBtnType={"x"} />
+      <AlbumHeader onBackBtn={editOnCancel} backBtnType={"x"} />
 
-          <div ref={imgAreaBox} className="view_box">
-            <FullCanvas loading={loading} img={img} imgSrc={imgSrc} resizing />
-            {loading ? <Loading /> : null}
-            <div className="manual_box">
-              {showBBox ? (
-                <DraggableTag
-                  left={bboxRef.current.left}
-                  top={bboxRef.current.top}
-                  right={bboxRef.current.right}
-                  bottom={bboxRef.current.bottom}
-                  zoomable={"n, w, s, e, nw, ne, se, sw"}
-                  onResize={(rectPosition, type) =>
-                    handleResize(rectPosition, type)
-                  }
-                  onDrag={(deltaX, deltaY, newBbox) =>
-                    handleDrag(deltaX, deltaY, newBbox)
-                  }
-                  draggable={initKid.by_user}
-                ></DraggableTag>
-              ) : null}
-            </div>
-          </div>
-          {kidList?.length > 0 && curImage ? (
-            <AlbumTagSelect
-              kidList={kidList}
-              onClickKid={handleSelectKid}
-              imageListData={[curImage]}
-              currentIdx={0}
-              editMode
-            />
-          ) : (
-            <div>
-              {" "}
-              <p>선택할 원아 목록이 없습니다. </p>
-            </div>
-          )}
-        </main>
+      <div ref={imgAreaBox} className="view_box">
+        <FullCanvas loading={loading} img={img} imgSrc={imgSrc} resizing />
+        {loading ? <Loading /> : null}
+        <div className="manual_box">
+          {showBBox ? (
+            <DraggableTag
+              left={bboxRef.current.left}
+              top={bboxRef.current.top}
+              right={bboxRef.current.right}
+              bottom={bboxRef.current.bottom}
+              zoomable={"n, w, s, e, nw, ne, se, sw"}
+              onResize={(rectPosition, type) =>
+                handleResize(rectPosition, type)
+              }
+              onDrag={(deltaX, deltaY, newBbox) =>
+                handleDrag(deltaX, deltaY, newBbox)
+              }
+              draggable={initKid.by_user}
+            ></DraggableTag>
+          ) : null}
+        </div>
       </div>
+      {kidList?.length > 0 && curImage ? (
+        <AlbumTagSelect
+          kidList={kidList}
+          onClickKid={handleSelectKid}
+          imageListData={[curImage]}
+          currentIdx={0}
+          editMode
+        />
+      ) : (
+        <div>
+          {" "}
+          <p>선택할 원아 목록이 없습니다. </p>
+        </div>
+      )}
     </>
   );
 }

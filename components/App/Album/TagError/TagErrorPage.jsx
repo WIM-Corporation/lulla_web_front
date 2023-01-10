@@ -3,6 +3,7 @@ import { ViewBox } from "@/components/App/Album/ViewBox/ViewBox";
 import { WriteBox } from "@/components/App/Album/WriteBox/WriteBox";
 import { errMsg } from "@/components/common/Utils";
 import axios from "axios";
+import router from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 export const ReportContainer = ({ report, onWrite }) => {
@@ -73,9 +74,15 @@ export const ReportContainer = ({ report, onWrite }) => {
             initText={report.initText}
             reporter={report.reporter}
             onInput={onWrite}
-            onClick={() =>
-              alert("태그 수정은 현재 개발 중입니다. 관리자에게 문의해주세요.")
-            }
+            onClick={() => {
+              router.push(
+                {
+                  pathname: `/app/album/report/${report.id}/edit`,
+                  query: { initData: report },
+                },
+                `/app/album/report/${report.id}/edit`
+              );
+            }}
           ></WriteBox>
           <div
             className={`overlay ${tagListPopup ? "show" : ""}`}

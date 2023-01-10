@@ -1,4 +1,6 @@
-export function Report() {}
+export function Report(reportId) {
+  this.id = reportId;
+}
 
 Report.prototype = {
   initReport: null,
@@ -30,7 +32,6 @@ Report.prototype = {
       class_id: value.class_id,
       school_id: value.school_id,
       total_medias: value.total_medias,
-      is_confirmed: false,
       content: value.content,
       media: value.media,
       created_at: value.created_at,
