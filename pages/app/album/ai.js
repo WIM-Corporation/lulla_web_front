@@ -23,7 +23,7 @@ import TestBtnCombo, {
 
 function Album() {
   const router = useRouter();
-  const isWebTestMode = false;
+  const isWebTestMode = true;
   const imgAreaBox = useRef(null);
 
   const [kidList, setKidList, kidListRef] = useState([]);
@@ -749,7 +749,11 @@ function Album() {
       }}
     >
       {isWebTestMode && (
-        <TestBtnCombo testData={testVideoData} onClick={initDataset} jsonData />
+        <TestBtnCombo
+          testData={dummyFromNativeData}
+          onClick={initDataset}
+          jsonData
+        />
       )}
       {onLoadFlag.current && (
         <>

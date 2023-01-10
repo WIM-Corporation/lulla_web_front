@@ -1,0 +1,46 @@
+.imgae_li {
+    width: auto;
+    height: auto;
+
+    .cut_img {
+        position: relative;
+        width: 68px;
+        height: 68px;
+
+        .tag_del {
+            cursor: pointer;
+            position: absolute;
+            top: -15px;
+            right: -7px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+
+            img {
+                width: 24px;
+            }
+        }
+    }
+
+    .child_name {
+        text-align: center;
+        font-size: 13px;
+        font-weight: normal;
+        font-style: normal;
+        letter-spacing: -0.13;
+        margin-top: 6px;
+
+    }
+
+    .child_class {
+        text-align: center;
+        font-size: 12px;
+        color: #9f9f9f;
+        letter-spacing: -0.1px;
+        text-align: center;
+        margin: 2px;
+    }
+
+
+}
