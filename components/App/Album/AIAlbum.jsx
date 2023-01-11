@@ -599,7 +599,7 @@ export default function AIAlbum({
       console.log("Kid Click");
       const tagNames = imgAreaBox.current.querySelectorAll(".tag_name");
       tagNames.forEach((tag, i) => {
-        if (tag.getAttribute("kid_id") == selected.kid_id) {
+        if (tag.getAttribute("kid-id") == selected.kid_id) {
           tag.setAttribute("data-selected", true);
         } else {
           tag.setAttribute("data-selected", false);
