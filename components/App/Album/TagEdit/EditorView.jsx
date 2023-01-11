@@ -1,13 +1,10 @@
-import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { encodeImage } from "@/components/common/Utils";
 import AlbumHeader from "@/components/App/Album/Common/AlbumHeader";
 import FullCanvas from "@/components/App/Album/TagCanvas/FullCanvas";
-import TagArea from "@/components/App/Album/TagCanvas/TagArea";
 
 /* Test Data */
 import Loading from "@/components/App/Album/Common/Loading";
-import { dummyKidList } from "@/components/App/Album/Common/Test";
 import AlbumTagSelect from "@/components/App/AlbumTagSelect";
 import DraggableTag from "@/components/App/Album/TagCanvas/DraggableTag";
 

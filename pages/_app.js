@@ -7,13 +7,14 @@ import { useRouter } from "next/router";
 import "@/styles/global.css";
 import MobXStoresContext from "@/stores/MobXStoreContext.js";
 import globalStore from "@/stores/globalStore";
-import authStore from "@/stores/authStore";
+import authStore from "@/stores/Auth";
 import joinStore from "@/stores/joinStore";
 import { useState } from "react";
 import { useEffect } from "react";
 import Toast from "@/components/common/Toast";
 import Edit from "@/components/Member/Account/Edit";
 import ChangeProfile from "@/components/Member/ChangeProfile";
+import useStores from "@/stores/useStores";
 
 const fireApp = initializeApp({
   apiKey: "AIzaSyDFlxKc7Wzyn6ZMGvJUh9MnfJMcKb0nbRE",
@@ -41,8 +42,9 @@ export default function MyApp({ Component, pageProps }) {
 
   // 주입할 전역 MobX Store들
   const initStores = {
-    globalStore,
     authStore,
+    globalStore,
+    // authStore,
     joinStore,
   };
 

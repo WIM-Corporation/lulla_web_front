@@ -1,25 +1,4 @@
-import axios from "axios";
-
-function setAxios(token) {
-  axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-  axios.defaults.headers.post["Content-Type"] = "application/json";
-  axios.defaults.headers.post["accept"] = "*/*";
-  axios.interceptors.response.use(
-    (response) => {
-      // custom errorcode check
-      if (response.data.resultCode != 1) {
-        let customError = new Error(response.data.message);
-        response.status = response.data.resultCode;
-        customError.response = response;
-        return Promise.reject(customError);
-      }
-      return response.data.data;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
-}
+import useStores from "@/stores/useStores";
 
 export const initPage = (deviceType) => {
   // call native functions for init
@@ -32,14 +11,12 @@ export const initPage = (deviceType) => {
   }
 };
 
-export const initAuth = (deviceType, authRef) => {
+export const initAuth = (deviceType, authStore) => {
+  authStore.clear();
+
   // bind auth receive function
   window.receiveAuthData = function (token, memberId) {
-    authRef.current = {
-      token,
-      memberId,
-    };
-    setAxios(token);
+    authStore.setAuth(token, memberId);
   };
 
   // call native functions for init
@@ -53,7 +30,6 @@ export const initAuth = (deviceType, authRef) => {
       token: "web",
       memberId: "web",
     };
-    setAxios("web");
   }
 };
 

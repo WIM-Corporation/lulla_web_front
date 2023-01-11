@@ -375,7 +375,7 @@ header {
   textarea:disabled {
     background-color: var(--gray10) !important;
     font-size: 12px !important;
-
+    overflow: visible
   }
 
   .text_area:focus {}

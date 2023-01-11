@@ -24,6 +24,13 @@ export const WriteBox = forwardRef(
   ({ initText, onInput, reporter, onClick }, textRef) => {
     const [texts, setTexts] = useState(null);
 
+    const setHeight = (e) => {
+      if (!e?.current || !initText) {
+        return {};
+      }
+      return { height: e.current.scrollHeight + "px" };
+    };
+
     useEffect(() => {
       console.log("initText ", initText);
       initText ? setTexts(initText) : null;
@@ -82,6 +89,7 @@ export const WriteBox = forwardRef(
             document.getElementsByClassName("Wrap")[0].scrollIntoView();
           }}
           disabled={initText ? true : false}
+          style={setHeight(textRef)}
         >
           {initText}
         </textarea>
