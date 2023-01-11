@@ -20,8 +20,14 @@ import TestBtnCombo, {
   dummyKidList,
   testVideoData,
 } from "@/components/App/Album/Common/Test";
+import { initPage } from "./nativeCalls";
 
-export default function AIAlbum({ initImages, onComplete, onBack }) {
+export default function AIAlbum({
+  initImages,
+  onComplete,
+  onBack,
+  deviceType, // TODO: redux / session storage
+}) {
   const router = useRouter();
   const isWebTestMode = false;
   const imgAreaBox = useRef(null);
@@ -75,7 +81,15 @@ export default function AIAlbum({ initImages, onComplete, onBack }) {
   /* EditMode (수동태그) */
   const onTagAreaClick = useCallback((e) => {
     if (isVideo) {
-      e.currentTarget.style.display = "none";
+      // e.currentTarget.style.display = "none";
+      const videoElement = e.currentTarget.querySelector("video");
+      if (videoElement) {
+        if (videoElement.paused) {
+          videoElement.play();
+        } else {
+          videoElement.pause();
+        }
+      }
       return;
     }
     if (
@@ -378,8 +392,11 @@ export default function AIAlbum({ initImages, onComplete, onBack }) {
       }
 
       window.setImages = setImages;
+
       if (initImages) {
         setImages(initImages);
+      } else {
+        initPage(deviceType);
       }
     }
     // check width
@@ -457,7 +474,7 @@ export default function AIAlbum({ initImages, onComplete, onBack }) {
   const handleComplete = (e) => {
     let finalImageArray = imageArray;
     finalImageArray = finalImageArray.map((image) => {
-      image.tags = image.tags.map((tag) => {
+      image.tags = image.tags?.map((tag) => {
         tag.bbox = tag.bbox.map((b) => parseInt(b));
         return tag;
       });

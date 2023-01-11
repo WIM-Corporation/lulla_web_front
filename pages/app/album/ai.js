@@ -1,6 +1,6 @@
 import useState from "react-usestateref";
 import qs from "qs";
-import { initPage } from "@/components/App/Album/nativeCalls";
+import { initAuth } from "@/components/App/Album/nativeCalls";
 import { useEffect, useRef } from "react";
 import AIAlbum from "@/components/App/Album/AIAlbum";
 
@@ -22,7 +22,7 @@ export default function AlbumContainer() {
 
   useEffect(() => {
     console.log("init report page");
-    initPage(deviceType, auth);
+    initAuth(deviceType, auth);
   }, []);
 
   const onBack = () => {
@@ -54,6 +54,7 @@ export default function AlbumContainer() {
             memberId={auth.current.memberId}
             onComplete={onComplete}
             onBack={onBack}
+            deviceType={deviceType}
           />
         </main>
       ) : null}
