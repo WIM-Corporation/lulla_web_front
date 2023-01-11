@@ -21,7 +21,18 @@ function setAxios(token) {
   );
 }
 
-export const initPage = (deviceType, authRef) => {
+export const initPage = (deviceType) => {
+  // call native functions for init
+  if (deviceType == "ios") {
+    window.webkit.messageHandlers.pageLoaded.postMessage("");
+  } else if (deviceType == "android") {
+    window.app.pageLoaded();
+  } else {
+    alert("[페이지 초기화] 이 기능은 앱에서 정상 작동 합니다.");
+  }
+};
+
+export const initAuth = (deviceType, authRef) => {
   // bind auth receive function
   window.receiveAuthData = function (token, memberId) {
     authRef.current = {
@@ -33,10 +44,8 @@ export const initPage = (deviceType, authRef) => {
 
   // call native functions for init
   if (deviceType == "ios") {
-    window.webkit.messageHandlers.pageLoaded.postMessage("");
     window.webkit.messageHandlers.getAuthData.postMessage("");
   } else if (deviceType == "android") {
-    window.app.pageLoaded();
     window.app.getAuthData();
   } else {
     alert("[페이지 초기화] 이 기능은 앱에서 정상 작동 합니다.");

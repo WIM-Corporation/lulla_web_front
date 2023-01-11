@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef, useState, useEffect } from "react";
 
 import AlbumHeader from "@/components/App/Album/Common/AlbumHeader";
-import { initPage, back } from "@/components/App/Album/nativeCalls";
+import { back, initAuth } from "@/components/App/Album/nativeCalls";
 
 //test
 import { dummyReportData } from "@/components/App/Album/Common/Test";
@@ -67,7 +67,7 @@ export default function ReportPage() {
   }
 
   useEffect(() => {
-    initPage(deviceType, auth);
+    initAuth(deviceType, auth);
 
     let _initWait = setInterval(() => {
       if (auth.current.token && reportId) {

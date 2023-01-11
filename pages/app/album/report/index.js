@@ -48,10 +48,11 @@ export default function ReportCreatePage() {
 
   useEffect(() => {
     console.log("init report page");
-    initPage(deviceType, auth);
+    initAuth(deviceType, auth);
     if (window) {
       window.setImage = setImage;
     }
+    initPage(deviceType);
 
     if (isWebTestMode) {
       setImage(JSON.stringify(dummyErrorImageData));
