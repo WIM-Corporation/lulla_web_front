@@ -8,7 +8,6 @@ class Auth {
   interceptor = null;
 
   constructor() {
-    console.log("constructor");
     axios.defaults.headers.post["Content-Type"] = "application/json";
     axios.defaults.headers.post["accept"] = "*/*";
     axios.interceptors.response.use(
