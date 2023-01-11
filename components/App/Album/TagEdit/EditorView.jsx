@@ -80,7 +80,8 @@ export default function EditorView({
 
     /* Draw a image */
     setCurImage(data);
-    const encoded = encodeImage(data.data);
+    console.log("!!", data);
+    const encoded = data.data ? encodeImage(data.data) : data.image_url;
     if (encoded) {
       setImgSrc(encoded);
       setTags(data.tags);

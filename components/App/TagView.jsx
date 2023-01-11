@@ -12,24 +12,14 @@ export default function AlbumTagSelect(props) {
     function setAlbumImage(jsonStr) {
       const data = JSON.parse(jsonStr);
 
-      axios({
-        method: "post",
-        url: "/api/v1/album/detail",
-        headers: {
-          Authorization: "Bearer " + data.token,
-        },
-        data: {
+      axios
+        .post("/api/v1/album/detail", {
           member_id: data.member_id,
           id: data.album_id,
-        },
-      })
-        .then(({ data: respData }) => {
-          if (respData.resultCode && respData.resultCode == 1) {
-            setImageList(respData.data.album.medias);
-            setCurIndex(0);
-          } else {
-            console.log(respData);
-          }
+        })
+        .then((res) => {
+          setImageList(res.album.medias);
+          setCurIndex(0);
         })
         .catch((err) => {
           console.error(err);

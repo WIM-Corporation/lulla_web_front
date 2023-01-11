@@ -23,7 +23,7 @@ import TestBtnCombo, {
 
 export default function AIAlbum({ initImages, onComplete, onBack }) {
   const router = useRouter();
-  const isWebTestMode = true;
+  const isWebTestMode = false;
   const imgAreaBox = useRef(null);
 
   const [kidList, setKidList, kidListRef] = useState([]);
@@ -146,32 +146,12 @@ export default function AIAlbum({ initImages, onComplete, onBack }) {
           image_string: image_string,
         })
       )
-      .then(({ data: respData }) => {
+      .then((res) => {
         // 로딩 끝내고
         // refactoring
-        console.log("[startAiProc] predict_v1_image_data result :", respData);
-        if (respData.resultCode != 1) {
-          console.error(
-            "[startAiProc] Failed : " +
-              "(" +
-              respData.resultCode +
-              ")" +
-              respData.message
-          );
-          alert("이미지 인식에 실패하였습니다.");
-          resTag = [];
+        console.log("[startAiProc] predict_v1_image_data result :", res);
 
-          if (isWebTestMode) {
-            dummyAITagResponse.data.tags.map((tag, i) => {
-              tag.kid_name =
-                kid_list.find((v) => v.kid_id == tag.kid_id)?.kid_name || "";
-              tag.class_name = class_name;
-            });
-            resTag = dummyAITagResponse.data.tags;
-          }
-        }
-
-        resTag = respData?.data?.tags || resTag;
+        resTag = res.tags || resTag;
 
         setTagComplete(true);
         resTag.map((tag, i) => {
@@ -231,6 +211,7 @@ export default function AIAlbum({ initImages, onComplete, onBack }) {
             height: imgObj.height || -1,
             tags: imgObj.tags || [], // 빈배열로 시작
             isTagged: imgObj.isTagged || false,
+            image_url: imgObj.image_url || null,
           }
     );
   };
@@ -322,25 +303,15 @@ export default function AIAlbum({ initImages, onComplete, onBack }) {
     let kid_list = [];
     await axios
       .post("/api/v1/kid/list/class", { school_id, class_id })
-      .then(({ data: res }) => {
+      .then((res) => {
         console.log("[getKidList] kid/list/class Data : ", res);
 
-        if (res.resultCode != 1) {
-          throw new Error(
-            "원아 목록을 가져오는데 실패하였습니다. \n" +
-              res.message +
-              "(" +
-              res.resultCode +
-              ")"
-          );
-        }
-
-        class_name = res?.data?.class_name;
+        class_name = res.class_name;
         if (!class_name) {
           throw new Error("Class 정보가 없습니다.");
         }
 
-        kid_list = res?.data?.kid_list;
+        kid_list = res.kid_list;
         if (!kid_list) {
           throw new Error(class_name + "반의 원아 정보가 없습니다");
         }
@@ -727,78 +698,84 @@ export default function AIAlbum({ initImages, onComplete, onBack }) {
                 leaveEditMode(newImage[currentIdx]);
               }}
             />
-          ) : null}
-          <AlbumHeader
-            onConfirm={handleComplete}
-            title={"태그 하기"}
-            activeBtn={isTagComplete}
-            onBackBtn={(e) => {
-              showCancelPop();
-            }}
-            infoBtn={true}
-          />
-          <div
-            ref={imgAreaBox}
-            className="view_box"
-            onTouchStart={setTouchStart}
-            onTouchEnd={setTouchEnd}
-            onClickCapture={onTagAreaClick}
-          >
-            {imageArray.length > 0 && (
-              <FullCanvas
-                loading={loading}
-                isVideo={isVideo}
-                img={img}
-                imgSrc={imgSrc}
-                onLoad={onImageLoadEvent}
-                onPause={onPauseEvent}
-                mediaType={mediaType}
-                resizing
+          ) : (
+            <>
+              <AlbumHeader
+                onConfirm={handleComplete}
+                title={"태그 하기"}
+                activeBtn={isTagComplete}
+                onBackBtn={(e) => {
+                  showCancelPop();
+                }}
+                infoBtn={true}
               />
-            )}
-            {loading ? (
-              <Loading />
-            ) : (
-              !error &&
-              tags && (
-                <>
-                  <Alert message={"인식이 완료되었습니다."} />
-                  {imageArray.length > 0 && (
-                    <CountView current={1 + currentIdx} total={totalMedias} />
-                  )}
-                  {drawTag ? (
-                    <TagArea
-                      tags={tagsRef.current}
-                      img={img}
-                      imgAreaBox={imgAreaBox}
-                      onClick={onTagAreaClick}
-                    />
-                  ) : null}
-                </>
-              )
-            )}
+              <div
+                ref={imgAreaBox}
+                className="view_box"
+                onTouchStart={setTouchStart}
+                onTouchEnd={setTouchEnd}
+                onClickCapture={onTagAreaClick}
+              >
+                {imageArray.length > 0 && (
+                  <FullCanvas
+                    loading={loading}
+                    isVideo={isVideo}
+                    img={img}
+                    imgSrc={imgSrc}
+                    onLoad={onImageLoadEvent}
+                    onPause={onPauseEvent}
+                    mediaType={mediaType}
+                    resizing
+                  />
+                )}
+                {loading ? (
+                  <Loading />
+                ) : (
+                  !error &&
+                  tags && (
+                    <>
+                      <Alert message={"인식이 완료되었습니다."} />
+                      {imageArray.length > 0 && (
+                        <CountView
+                          current={1 + currentIdx}
+                          total={totalMedias}
+                        />
+                      )}
+                      {drawTag ? (
+                        <TagArea
+                          tags={tagsRef.current}
+                          img={img}
+                          imgAreaBox={imgAreaBox}
+                          onClick={onTagAreaClick}
+                        />
+                      ) : null}
+                    </>
+                  )
+                )}
 
-            <AITagView
-              tags={tags}
-              handleTagClick={handleTagClick}
-              handleTagDelClick={handleTagDelClick}
-              imgSrc={imgSrc}
-            />
-          </div>
-          <WarnPopup
-            show={cancelPopup}
-            title={"모든 사진에 태그된 정보가 사라집니다"}
-            onClose={leaveWarnPopup}
-            onConfirm={handleBackPress}
-          />
-          {SimplePopup(deletePopup, leaveDeletePopup, deleteCurrentImg)})
-          <style jsx>
-            {`
-              .tag_area ~ * {
-                filter: grayscale(50%) blur(5px);
-              }
-            `}
-          </style>
+                <AITagView
+                  tags={tags}
+                  handleTagClick={handleTagClick}
+                  handleTagDelClick={handleTagDelClick}
+                  imgSrc={imgSrc}
+                />
+              </div>
+              <WarnPopup
+                show={cancelPopup}
+                title={"모든 사진에 태그된 정보가 사라집니다"}
+                onClose={leaveWarnPopup}
+                onConfirm={handleBackPress}
+              />
+              {SimplePopup(deletePopup, leaveDeletePopup, deleteCurrentImg)})
+              <style jsx>
+                {`
+                  .tag_area ~ * {
+                    filter: grayscale(50%) blur(5px);
+                  }
+                `}
+              </style>
+            </>
+          )}
         </>
       )}
     </div>

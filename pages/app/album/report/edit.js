@@ -6,19 +6,17 @@ import { useEffect, useState } from "react";
 export default function EditPage({}) {
   const router = useRouter();
   const [initImages, setInitImages] = useState(null);
+  const initData = JSON.parse(router.query.initData);
+
   useEffect(() => {
     //report to image
-    console.log("router", router);
-    if (router.query?.initData) {
-      const initData = JSON.parse(router.query.initData);
-
-      let imageData = new ImageTag();
-      imageData.school_id = initData.school_id;
-      imageData.class_id = initData.class_id;
-      imageData.total_medias = initData.total_medias;
-      imageData.medias = [initData.media];
-      setInitImages(imageData);
-    }
+    console.log("router", router.query);
+    let imageData = new ImageTag();
+    imageData.school_id = initData.school_id;
+    imageData.class_id = initData.class_id;
+    imageData.total_medias = initData.total_medias;
+    imageData.medias = [initData.media];
+    setInitImages(JSON.stringify(imageData));
   }, []);
 
   return (

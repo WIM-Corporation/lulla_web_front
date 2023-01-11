@@ -14,12 +14,8 @@ export const ReportContainer = ({ report, onWrite }) => {
   const [ready, setReady] = useState(false);
 
   async function getKidList(school_id, class_id, tag_list) {
-    await axios({
-      method: "post",
-      headers: { "Content-Type": `application/json` },
-      url: "/api/v1/kid/list/class",
-      data: { school_id, class_id },
-    })
+    await axios
+      .post("/api/v1/kid/list/class", { school_id, class_id })
       .then((res) => {
         const class_name = res.class_name;
         if (!class_name) {
@@ -77,10 +73,13 @@ export const ReportContainer = ({ report, onWrite }) => {
             onClick={() => {
               router.push(
                 {
-                  pathname: `/app/album/report/${report.id}/edit`,
-                  query: { initData: report },
+                  pathname: `/app/album/report/edit`,
+                  query: {
+                    initData: JSON.stringify(report.output),
+                    reportId: report.id,
+                  },
                 },
-                `/app/album/report/${report.id}/edit`
+                `/app/album/report/edit`
               );
             }}
           ></WriteBox>
