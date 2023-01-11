@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRef, useState, useEffect } from "react";
 
 import AlbumHeader from "@/components/App/Album/Common/AlbumHeader";
-import { initPage, back } from "@/components/App/Album/nativeCalls";
+import { initPage, back, initAuth } from "@/components/App/Album/nativeCalls";
 import { dummyErrorImageData } from "@/components/App/Album/Common/Test";
 import WarnPopup from "@/components/common/WarnPopup";
 import { ReportContainer } from "@/components/App/Album/TagError/TagErrorPage";
