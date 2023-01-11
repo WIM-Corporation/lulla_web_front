@@ -94,7 +94,7 @@ export default function AIAlbum({
     }
     if (
       e.target.classList.contains("tag_area") &&
-      !e.target.classList.contains("tag_line") &&
+      !e.target.classList.contains("tag_zon") &&
       !isEditMode
     ) {
       const boxSize = 150; // default
@@ -783,7 +783,7 @@ export default function AIAlbum({
                 onClose={leaveWarnPopup}
                 onConfirm={handleBackPress}
               />
-              {SimplePopup(deletePopup, leaveDeletePopup, deleteCurrentImg)})
+              {SimplePopup(deletePopup, leaveDeletePopup, deleteCurrentImg)}
               <style jsx>
                 {`
                   .tag_area ~ * {

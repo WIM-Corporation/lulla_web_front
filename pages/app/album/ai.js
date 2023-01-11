@@ -3,26 +3,25 @@ import qs from "qs";
 import { initAuth } from "@/components/App/Album/nativeCalls";
 import { useEffect, useRef } from "react";
 import AIAlbum from "@/components/App/Album/AIAlbum";
+import useStores from "@/stores/useStores";
 
 export default function AlbumContainer() {
   const deviceType =
     qs.parse(location.search, { ignoreQueryPrefix: true })?.type || "web";
   const [ready, setReady, readyRef] = useState(false);
-  const auth = useRef(null);
+  const { authStore } = useStores();
 
   useEffect(() => {
+    console.log("init report page");
+    initAuth(deviceType, authStore);
+
     let _initWait = setInterval(() => {
-      if (auth.current?.token) {
+      if (authStore.token) {
         clearInterval(_initWait);
         setReady(true);
       }
     }, 500);
     setTimeout(() => clearInterval(_initWait), 5000);
-  }, [auth]);
-
-  useEffect(() => {
-    console.log("init report page");
-    initAuth(deviceType, auth);
   }, []);
 
   const onBack = () => {
@@ -51,7 +50,7 @@ export default function AlbumContainer() {
       {ready ? (
         <main>
           <AIAlbum
-            memberId={auth.current.memberId}
+            memberId={authStore.memberId}
             onComplete={onComplete}
             onBack={onBack}
             deviceType={deviceType}

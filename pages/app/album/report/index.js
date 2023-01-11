@@ -9,6 +9,7 @@ import { ReportContainer } from "@/components/App/Album/TagError/TagErrorPage";
 import { errMsg } from "@/components/common/Utils";
 import { Report } from "@/service/album/Report";
 import qs from "qs";
+import useStores from "@/stores/useStores";
 
 // TODO: ts or set prototype, 분리
 export default function ReportCreatePage() {
@@ -18,7 +19,7 @@ export default function ReportCreatePage() {
     qs.parse(location.search, { ignoreQueryPrefix: true })?.type || "web";
 
   const [ready, setReady] = useState(false);
-  const auth = useRef(null);
+  const { authStore } = useStores();
 
   const [cancelPopup, showCancelPopup, cancelPopupRef] = useState(false);
   const report = useRef(new Report());
@@ -48,7 +49,22 @@ export default function ReportCreatePage() {
 
   useEffect(() => {
     console.log("init report page");
-    initAuth(deviceType, auth);
+    initAuth(deviceType, authStore);
+
+    let _initWait = setInterval(() => {
+      if (
+        authStore.token &&
+        report &&
+        report.current.schoolId &&
+        report.current.classId
+      ) {
+        clearInterval(_initWait);
+        report.current.memberId = authStore.memberId;
+        setReady(true);
+      }
+    }, 500);
+    setTimeout(() => clearInterval(_initWait), 5000);
+
     if (window) {
       window.setImage = setImage;
     }
@@ -58,17 +74,6 @@ export default function ReportCreatePage() {
       setImage(JSON.stringify(dummyErrorImageData));
     }
   }, []);
-
-  useEffect(() => {
-    let _initWait = setInterval(() => {
-      if (report && report.current.schoolId && report.current.classId) {
-        clearInterval(_initWait);
-        report.current.memberId = auth.current.memberId;
-        setReady(true);
-      }
-    }, 500);
-    setTimeout(() => clearInterval(_initWait), 5000);
-  }, [auth]);
 
   return (
     <div className="Wrap">

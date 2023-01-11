@@ -11,9 +11,11 @@ import { ReportContainer } from "@/components/App/Album/TagError/TagErrorPage";
 import { errMsg } from "@/components/common/Utils";
 import qs from "qs";
 import { Report } from "@/service/album/Report";
+import useStores from "@/stores/useStores";
 
 export default function ReportPage() {
   const isWebTestMode = false;
+  const { authStore } = useStores();
 
   const reportId = location.pathname.substring(
     location.pathname.lastIndexOf("/") + 1
@@ -22,7 +24,6 @@ export default function ReportPage() {
     qs.parse(location.search, { ignoreQueryPrefix: true })?.type || "web";
 
   const report = useRef(new Report(reportId));
-  const auth = useRef(null);
   const [ready, setReady] = useState(false);
 
   function getReport(member_id, tag_error_id) {
@@ -67,12 +68,12 @@ export default function ReportPage() {
   }
 
   useEffect(() => {
-    initAuth(deviceType, auth);
+    initAuth(deviceType, authStore);
 
     let _initWait = setInterval(() => {
-      if (auth.current.token && reportId) {
+      if (authStore.token && reportId) {
         clearInterval(_initWait);
-        getReport(auth.current.memberId, reportId);
+        getReport(authStore.memberId, reportId);
       }
     }, 500);
     setTimeout(() => clearInterval(_initWait), 5000);
@@ -85,9 +86,7 @@ export default function ReportPage() {
           onBackBtn={() => back(deviceType)}
           title={"태그 오류 알림"}
         />
-        {auth.current && ready ? (
-          <ReportContainer report={report.current} />
-        ) : null}
+        {ready ? <ReportContainer report={report.current} /> : null}
       </main>
     </div>
   );
