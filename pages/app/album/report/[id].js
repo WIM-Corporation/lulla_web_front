@@ -21,7 +21,7 @@ export default function ReportPage() {
   const deviceType =
     qs.parse(location.search, { ignoreQueryPrefix: true })?.type || "web";
 
-  const report = useRef(new Report());
+  const report = useRef(new Report(reportId));
   const auth = useRef(null);
   const [ready, setReady] = useState(false);
 

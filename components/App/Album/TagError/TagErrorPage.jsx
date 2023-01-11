@@ -3,6 +3,7 @@ import { ViewBox } from "@/components/App/Album/ViewBox/ViewBox";
 import { WriteBox } from "@/components/App/Album/WriteBox/WriteBox";
 import { errMsg } from "@/components/common/Utils";
 import axios from "axios";
+import router from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 export const ReportContainer = ({ report, onWrite }) => {
@@ -13,12 +14,8 @@ export const ReportContainer = ({ report, onWrite }) => {
   const [ready, setReady] = useState(false);
 
   async function getKidList(school_id, class_id, tag_list) {
-    await axios({
-      method: "post",
-      headers: { "Content-Type": `application/json` },
-      url: "/api/v1/kid/list/class",
-      data: { school_id, class_id },
-    })
+    await axios
+      .post("/api/v1/kid/list/class", { school_id, class_id })
       .then((res) => {
         const class_name = res.class_name;
         if (!class_name) {
@@ -73,9 +70,18 @@ export const ReportContainer = ({ report, onWrite }) => {
             initText={report.initText}
             reporter={report.reporter}
             onInput={onWrite}
-            onClick={() =>
-              alert("태그 수정은 현재 개발 중입니다. 관리자에게 문의해주세요.")
-            }
+            onClick={() => {
+              router.push(
+                {
+                  pathname: `/app/album/report/edit`,
+                  query: {
+                    initData: JSON.stringify(report.output),
+                    reportId: report.id,
+                  },
+                },
+                `/app/album/report/edit`
+              );
+            }}
           ></WriteBox>
           <div
             className={`overlay ${tagListPopup ? "show" : ""}`}
