@@ -445,7 +445,7 @@ export default function AIAlbum({
           class_name: tags[i].class_name || className,
           bbox: tags[i].bbox || [],
           by_user: tags[i].by_user || false,
-          id: "",
+          id: tags[i].id || "",
         };
         if (newImageArray[currentIdx].tags[i].kid_id) {
           const findIndex = newImageArray[currentIdx].tags.findIndex(
