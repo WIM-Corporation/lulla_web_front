@@ -58,6 +58,7 @@ export default function AIAlbum({
   const [initEditKid, setInitEditKid, initEditKidRef] = useState(null);
 
   const [mediaType, setMediaType, mediaTypeRef] = useState(null);
+  const editTagRef = useRef(null)
 
   // const [returnData, setReturnData] = useState([]); // window.appReturnData 로 이동
   const touchTimerRef = useRef({
@@ -617,6 +618,7 @@ export default function AIAlbum({
         (tag) => JSON.stringify(selected.bbox) == JSON.stringify(tag.bbox)
       );
       const newTags = tags.filter((tag, idx) => idx !== selectedIdx);
+      editTagRef.current = selected
       imageArrayRef.current[currentIdx].tags = newTags;
       setTags(newTags);
       setInitEditKid(selected);
@@ -704,6 +706,7 @@ export default function AIAlbum({
               initClassName={className}
               kidList={kidList}
               editImage={imageArray[currentIdx]}
+              editTag={editTagRef.current}
               editOnCancel={() => {
                 leaveEditMode(imageArray[currentIdx]);
               }}
