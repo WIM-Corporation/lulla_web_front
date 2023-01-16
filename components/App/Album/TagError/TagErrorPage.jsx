@@ -12,6 +12,7 @@ export const ReportContainer = ({ report, onWrite }) => {
   const [tagList, setTagList] = useState([]);
   const textRef = useRef(null);
   const [ready, setReady] = useState(false);
+  const tagType = report.output.tag_type;
 
   async function getKidList(school_id, class_id, tag_list) {
     await axios
@@ -55,6 +56,24 @@ export const ReportContainer = ({ report, onWrite }) => {
     setReady(true);
   }, []);
 
+  const clickEditBtn = () => {
+    const pathname = report.output.tag_type === 0 ? `/app/album/report/edit` : `/app/album/report/edit`;
+    router.push(
+      {
+        pathname,
+        query: {
+          initData: JSON.stringify(report.output),
+          reportId: report.id,
+        },
+        pathname
+      },
+    );
+  }
+  
+  const clickTagInfoIcon = () => {
+    showTagList(true)
+  }
+
   return (
     <>
       {ready ? (
@@ -63,25 +82,16 @@ export const ReportContainer = ({ report, onWrite }) => {
             mediaArray={[report.media]}
             total={report.totalMedias}
             idx={0}
-            onClickTagInfo={() => showTagList(true)}
+            onClickTagInfo={clickTagInfoIcon}
+            showTag={tagListPopup}
+            isAiTag={tagType === 0 ? true : false}
           />
           <WriteBox
             ref={textRef}
             initText={report.initText}
             reporter={report.reporter}
             onInput={onWrite}
-            onClick={() => {
-              router.push(
-                {
-                  pathname: `/app/album/report/edit`,
-                  query: {
-                    initData: JSON.stringify(report.output),
-                    reportId: report.id,
-                  },
-                },
-                `/app/album/report/edit`
-              );
-            }}
+            onClick={clickEditBtn}
           ></WriteBox>
           <div
             className={`overlay ${tagListPopup ? "show" : ""}`}

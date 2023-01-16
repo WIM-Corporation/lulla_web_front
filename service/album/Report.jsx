@@ -36,6 +36,7 @@ Report.prototype = {
       media: value.media,
       created_at: value.created_at,
       is_confirmed: value.is_confirmed || false,
+      tag_type: value.tag_type,
     };
   },
 

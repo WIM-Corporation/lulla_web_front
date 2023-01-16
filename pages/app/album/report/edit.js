@@ -7,7 +7,8 @@ export default function EditPage({}) {
   const router = useRouter();
   const [initImages, setInitImages] = useState(null);
   const initData = JSON.parse(router.query.initData);
-
+  const [sourceTag,setSourceTag] = useState(null);
+  
   useEffect(() => {
     //report to image
     console.log("router", router.query);
@@ -19,15 +20,24 @@ export default function EditPage({}) {
     setInitImages(JSON.stringify(imageData));
   }, []);
 
+  const handleComplete = (data, popFunc) => {
+    if(typeof popFunc == 'function'){
+      popFunc();
+    }
+  
+  }
   return (
     <div className="Wrap">
       {initImages ? (
         <main>
           <AIAlbum
             memberId={initData.member_id}
-            onComplete={() => router.back()}
+            onComplete={handleComplete}
             onBack={() => router.back()}
             initImages={initImages}
+            backBtnType="x"
+            isErrorPage={true}
+            sourceTags={initData.media?.tags}
           />
         </main>
       ) : null}

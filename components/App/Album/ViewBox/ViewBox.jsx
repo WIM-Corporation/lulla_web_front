@@ -25,6 +25,8 @@ export const ViewBox = ({
   onClickTagInfo,
   idx = 0,
   tagType = "bubble",
+  isAiTag,
+  showTag,
 }) => {
   const imgAreaBox = useRef(null);
 
@@ -64,12 +66,11 @@ export const ViewBox = ({
       } else {
         setIsVideo(false);
         setImgSrc(parseImageSrc(curImage));
-        setTags(curImage.tags);
+        setTags(isAiTag && showTag ? curImage.tags : []);
         console.log("!setImgSrc");
       }
     }
-  }, [currentIdx]);
-
+  }, [currentIdx,showTag]);
   return (
     <>
       <div ref={imgAreaBox} className="view_box">

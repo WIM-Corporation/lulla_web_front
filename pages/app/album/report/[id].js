@@ -45,6 +45,10 @@ export default function ReportPage() {
           throw new Error("몇번째 사진인지 정보가 필요합니다.");
         }
 
+        if(res.tag_error?.tag_type !== 0 && res.tag_error?.tag_type !== 1){
+          throw new Error(`[TAG_TYPE_ERROR] TAG_TYPE:${res.tag_error?.tag_type}`);
+        }
+
         // //TODO: discuss a format difference btw BE or native
         // // BE : media -> array
         // // native : media -> json
@@ -84,9 +88,13 @@ export default function ReportPage() {
       <main>
         <AlbumHeader
           onBackBtn={() => back(deviceType)}
-          title={"태그 오류 알림"}
+          title={"태그 오류 알림"}          
         />
-        {ready ? <ReportContainer report={report.current} /> : null}
+        {
+          !ready ? null :
+            report.current.output.tag_type === 0 ?
+              <ReportContainer report={report.current} /> : null
+        }
       </main>
     </div>
   );

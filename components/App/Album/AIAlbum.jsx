@@ -26,7 +26,10 @@ export default function AIAlbum({
   initImages,
   onComplete,
   onBack,
-  deviceType, // TODO: redux / session storage
+  deviceType, // TODO: redux / session storage,
+  backBtnType,
+  headTitle,
+  isErrorPage,
 }) {
   const router = useRouter();
   const isWebTestMode = false;
@@ -72,12 +75,17 @@ export default function AIAlbum({
 
   //popup
   const [cancelPopup, showCancelPopup, cancelPopupRef] = useState(false);
+  const [cancelPopMsg, setCancelPopMsg, cancelPopMsgRef] = useState("")
   const [deletePopup, setDeletePopup, deletePopupRef] = useState(false);
 
   //auth
   const delayRef = useRef(null);
   const actionLog = useRef(null);
   const onLoadFlag = useRef(null);
+
+  //error page
+  const [isEditTags, editTags] = useState(false) 
+  const [sourceTags, setSourceTags] = useState(null);
 
   /* EditMode (수동태그) */
   const onTagAreaClick = useCallback((e) => {
@@ -263,6 +271,10 @@ export default function AIAlbum({
     window.appReturnData = [];
     onLoadFlag.current = true;
     let src = null;
+
+    if(isErrorPage){
+      setSourceTags(data.medias[0]?.tags)
+    }
 
     try {
       if (
@@ -465,6 +477,14 @@ export default function AIAlbum({
       //refactoring need
       setTagComplete(true);
       checkAllTagged(newImageArray);
+
+      if(isErrorPage){
+        if(JSON.stringify(sourceTags) !== JSON.stringify(newImageArray[currentIdx].tags)){
+          editTags(true)
+        }else{
+          editTags(false)
+        }
+      }
     }
   }, [tags]);
 
@@ -490,7 +510,11 @@ export default function AIAlbum({
       deleted_medias_seq: deletedMediasSeq.sort(),
     });
 
-    onComplete(resultJsonStr);
+    if(!isErrorPage){
+      onComplete(resultJsonStr);
+    }else{
+      showCancelPop("원아가 태그 되지 않은 사진은\n해당 보호자와 가족이 볼 수 없습니다.")
+    }
   };
 
   /* Swipe Events for view box */
@@ -498,7 +522,7 @@ export default function AIAlbum({
   let touchendX = 0;
 
   const setTouchStart = (e) => {
-    if (!isEditMode && !loading && img && imgSrc) {
+    if (!isEditMode && !isErrorPage && !loading && img && imgSrc) {
       touchstartX = e.changedTouches[0].screenX; //image swipe
 
       touchTimerRef.current.timerId = setInterval(() => {
@@ -518,7 +542,7 @@ export default function AIAlbum({
   };
 
   const setTouchEnd = (e) => {
-    if (!isEditMode && !loading && img && imgSrc) {
+    if (!isEditMode && !isErrorPage && !loading && img && imgSrc) {
       if (touchTimerRef.current.timerId) {
         //long touch
         clearInterval(touchTimerRef.current.timerId);
@@ -638,8 +662,9 @@ export default function AIAlbum({
     actionLog.current = "aiTagging";
   };
 
-  const showCancelPop = () => {
+  const showCancelPop = (message) => {
     showCancelPopup(true);
+    setCancelPopMsg(message);
     actionLog.current = "cancelPopup";
   };
 
@@ -723,12 +748,11 @@ export default function AIAlbum({
             <>
               <AlbumHeader
                 onConfirm={handleComplete}
-                title={"태그 하기"}
-                activeBtn={isTagComplete}
-                onBackBtn={(e) => {
-                  showCancelPop();
-                }}
+                title={headTitle}
+                activeBtn={!isErrorPage ?  isTagComplete : isEditTags }
+                onBackBtn={() => showCancelPop(!isErrorPage ? "모든 사진에 태그된 정보가 사라집니다" : "변경된 내용이 저장되지 않습니다.\n태그 수정을 그만하시겠습니까?")}        
                 infoBtn={true}
+                backBtnType={backBtnType}
               />
               <div
                 ref={imgAreaBox}
@@ -783,7 +807,7 @@ export default function AIAlbum({
               </div>
               <WarnPopup
                 show={cancelPopup}
-                title={"모든 사진에 태그된 정보가 사라집니다"}
+                title={cancelPopMsg}
                 onClose={leaveWarnPopup}
                 onConfirm={handleBackPress}
               />
