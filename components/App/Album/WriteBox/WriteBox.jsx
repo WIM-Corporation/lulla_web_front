@@ -28,7 +28,7 @@ export const WriteBox = forwardRef(
       if (!e?.current || !initText) {
         return {};
       }
-      return { height: e.current.scrollHeight + "px" };
+      return { height: e.current.scrollHeight + 2 + "px" };
     };
 
     useEffect(() => {

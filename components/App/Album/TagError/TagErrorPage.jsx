@@ -62,8 +62,12 @@ export const ReportContainer = ({ report, onWrite }) => {
           <ViewBox
             mediaArray={[report.media]}
             total={report.totalMedias}
-            idx={0}
-            onClickTagInfo={() => showTagList(true)}
+            currentIdx={0}
+            openModal={(type) => {
+              //TODO: modal manager
+              if (type == "tag-info") showTagList(true);
+            }}
+            tagBox
           />
           <WriteBox
             ref={textRef}
