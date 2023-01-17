@@ -69,7 +69,7 @@ export const ReportContainer = ({ report, onWrite }) => {
       },
     );
   }
-  
+
   const clickTagInfoIcon = () => {
     showTagList(true)
   }
@@ -85,6 +85,12 @@ export const ReportContainer = ({ report, onWrite }) => {
             onClickTagInfo={clickTagInfoIcon}
             showTag={tagListPopup}
             isAiTag={tagType === 0 ? true : false}
+            currentIdx={0}
+            openModal={(type) => {
+              //TODO: modal manager
+              if (type == "tag-info") showTagList(true);
+            }}
+            tagBox
           />
           <WriteBox
             ref={textRef}

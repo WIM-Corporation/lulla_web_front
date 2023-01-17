@@ -61,7 +61,7 @@ export default function AIAlbum({
   const [initEditKid, setInitEditKid, initEditKidRef] = useState(null);
 
   const [mediaType, setMediaType, mediaTypeRef] = useState(null);
-  const editTagRef = useRef(null)
+  const editTagRef = useRef(null);
 
   // const [returnData, setReturnData] = useState([]); // window.appReturnData 로 이동
   const touchTimerRef = useRef({
@@ -529,10 +529,12 @@ export default function AIAlbum({
         e.preventDefault();
         //long touch
         if (touchTimerRef.current.now > touchTimerRef.current.triggerTime) {
-          setDeletePopup(true);
-          touchTimerRef.current.now = 0;
-          clearInterval(touchTimerRef.current.timerId);
-          actionLog.current = "deletePopup";
+          if (imageArray.length > 1) {
+            setDeletePopup(true);
+            touchTimerRef.current.now = 0;
+            clearInterval(touchTimerRef.current.timerId);
+            actionLog.current = "deletePopup";
+          }
         } else {
           touchTimerRef.current.now =
             touchTimerRef.current.now + touchTimerRef.current.interval;
@@ -642,7 +644,7 @@ export default function AIAlbum({
         (tag) => JSON.stringify(selected.bbox) == JSON.stringify(tag.bbox)
       );
       const newTags = tags.filter((tag, idx) => idx !== selectedIdx);
-      editTagRef.current = selected
+      editTagRef.current = selected;
       imageArrayRef.current[currentIdx].tags = newTags;
       setTags(newTags);
       setInitEditKid(selected);

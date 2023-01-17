@@ -24,9 +24,13 @@ export const ViewBox = ({
   total,
   onClickTagInfo,
   idx = 0,
+  openModal,
+  setCurrentIdx,
+  currentIdx,
   tagType = "bubble",
   isAiTag,
   showTag,
+  tagBox = false,
 }) => {
   const imgAreaBox = useRef(null);
 
@@ -36,7 +40,7 @@ export const ViewBox = ({
   // medias
   const [totalMedias, setTotalMedias] = useState(null);
 
-  const currentIdx = useRef(null);
+  // const currentIdx = useRef(null);
   const [curImg, setCurImg] = useState(null);
   const [img, setImg] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
@@ -51,29 +55,36 @@ export const ViewBox = ({
     total ? setTotalMedias(total) : setTotalMedias(mediaArray.length);
   }, []);
 
+  function reRender(idx) {
+    const curImage = mediaArray[idx];
+    setCurImg(curImage);
+
+    if (curImage?.mime_type?.startsWith("video")) {
+      alert("not implemented yet!");
+      setIsVideo(true);
+    } else {
+      setIsVideo(false);
+      setImgSrc(parseImageSrc(curImage));
+      setTags(isAiTag && showTag ? curImage.tags : []);
+      console.log("!setImgSrc");
+    }
+  }
   useEffect(() => {
-    if (currentIdx.current !== null) {
+    if (currentIdx !== null) {
       setTags([]);
       setImg(new window.Image());
       setLoading(true);
-
-      const curImage = mediaArray[currentIdx.current];
-      setCurImg(curImage);
-
-      if (curImage?.mime_type?.startsWith("video")) {
-        alert("not implemented yet!");
-        setIsVideo(true);
-      } else {
-        setIsVideo(false);
-        setImgSrc(parseImageSrc(curImage));
-        setTags(isAiTag && showTag ? curImage.tags : []);
-        console.log("!setImgSrc");
-      }
+      reRender(currentIdx);
     }
   }, [currentIdx,showTag]);
   return (
     <>
-      <div ref={imgAreaBox} className="view_box">
+      <div
+        ref={imgAreaBox}
+        className="view_box"
+        onTouchStart={setTouchStart}
+        onTouchEnd={setTouchEnd}
+      >
         <FullCanvas
           loading={loading}
           img={img}
@@ -84,19 +95,22 @@ export const ViewBox = ({
         {loading ? (
           <Loading />
         ) : (
-          <TagArea
-            tagType={tagType}
-            tags={tags}
-            img={img}
-            imgAreaBox={imgAreaBox}
-          />
+          tags &&
+          tagBox && (
+            <TagArea
+              tagType={tagType}
+              tags={tags}
+              img={img}
+              imgAreaBox={imgAreaBox}
+            />
+          )
         )}
 
         {totalMedias > 0 && curImg && (
           <>
             <CountView current={1 + curImg.seq} total={totalMedias} />
-            {onClickTagInfo && (
-              <div className="tag_info" onClick={onClickTagInfo}>
+            {onClickTagInfo && tagBox && (
+              <div className="tag_info" onClick={openModal("tag-list")} onClick={onClickTagInfo}>
                 <Image src={TagIcon} />
               </div>
             )}
