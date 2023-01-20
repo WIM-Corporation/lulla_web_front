@@ -47,11 +47,78 @@ export const ViewBox = ({
   const [isVideo, setIsVideo] = useState(false);
   const [tags, setTags] = useState(null);
 
+  // touch event
+  const touchTimerRef = useRef({
+    now: null,
+    timerId: null,
+    interval: 10,
+    triggerTime: 2500,
+  });
+
+  let touchstartX = 0;
+  let touchendX = 0;
+
+  const setTouchStart = (e) => {
+    if (!loading && img && imgSrc) {
+      touchstartX = e.changedTouches[0].screenX; //image swipe
+
+      touchTimerRef.current.timerId = setInterval(() => {
+        e.preventDefault();
+        //long touch
+        if (touchTimerRef.current.now > touchTimerRef.current.triggerTime) {
+          if (mediaArray.length > 1) {
+            // ViewBox code is an ugly mess.
+            // And below code is just a stopgap. Please refactoring !
+
+            openModal && openModal("delete");
+            //TODO: 1. create modal manager instead of using leaveXX functions
+            //TODO: 2. useContext or reducer -> manage the state (backkey, modal show.. etc) instead of using actionLog
+            //TODO: 3. split touch Events as handler function which gunna bind to viewBox ref <ViewBox {...touchHandler}>
+            //TODO: 4. use fetch for editor view
+            //TODO: 5. reduce useState
+
+            touchTimerRef.current.now = 0;
+            clearInterval(touchTimerRef.current.timerId);
+          }
+        } else {
+          touchTimerRef.current.now =
+            touchTimerRef.current.now + touchTimerRef.current.interval;
+        }
+      }, 1);
+    }
+  };
+
+  const setTouchEnd = (e) => {
+    if (!loading && img && imgSrc) {
+      if (touchTimerRef.current.timerId) {
+        //long touch
+        clearInterval(touchTimerRef.current.timerId);
+        touchTimerRef.current.now = 0;
+      }
+      //image swipe
+      touchendX = e.changedTouches[0].screenX;
+      if (touchendX < touchstartX && touchstartX - touchendX > 150) {
+        if (currentIdx + 1 < mediaArray.length) {
+          setCurrentIdx(currentIdx + 1);
+        } else if (mediaArray.length > 1) {
+          alert("다음 이미지가 없습니다.");
+        }
+      } else if (touchendX > touchstartX && touchendX - touchstartX > 150) {
+        if (currentIdx > 0) {
+          setCurrentIdx(currentIdx - 1);
+        } else if (mediaArray.length > 1) {
+          alert("이전 이미지가 없습니다.");
+        }
+      }
+    }
+  };
+
+  // touch event end
+
   useEffect(() => {
     setImg(new window.Image());
     setLoading(true);
     console.log("!setImg");
-    currentIdx.current = idx;
     total ? setTotalMedias(total) : setTotalMedias(mediaArray.length);
   }, []);
 
@@ -109,7 +176,7 @@ export const ViewBox = ({
         {totalMedias > 0 && curImg && (
           <>
             <CountView current={1 + curImg.seq} total={totalMedias} />
-            {onClickTagInfo && tagBox && (
+            {tagBox && (
               <div className="tag_info" onClick={openModal("tag-list")} onClick={onClickTagInfo}>
                 <Image src={TagIcon} />
               </div>

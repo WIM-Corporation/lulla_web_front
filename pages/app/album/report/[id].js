@@ -15,11 +15,12 @@ import useStores from "@/stores/useStores";
 
 export default function ReportPage() {
   const isWebTestMode = false;
-  const { authStore } = useStores();
+  const { authStore,reportStore } = useStores();
 
   const reportId = location.pathname.substring(
     location.pathname.lastIndexOf("/") + 1
   );
+
   const deviceType =
     qs.parse(location.search, { ignoreQueryPrefix: true })?.type || "web";
 
@@ -81,6 +82,9 @@ export default function ReportPage() {
       }
     }, 500);
     setTimeout(() => clearInterval(_initWait), 5000);
+    return () => {
+        reportStore.setEditFlag(false);
+    }
   }, []);
 
   return (

@@ -6,7 +6,7 @@ import axios from "axios";
 import router from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-export const ReportContainer = ({ report, onWrite }) => {
+export const ReportContainer = ({ report, onWrite, isEdited }) => {
   // tag list popup
   const [tagListPopup, showTagList] = useState(false);
   const [tagList, setTagList] = useState([]);
@@ -64,9 +64,8 @@ export const ReportContainer = ({ report, onWrite }) => {
         query: {
           initData: JSON.stringify(report.output),
           reportId: report.id,
+        }
         },
-        pathname
-      },
     );
   }
 
@@ -110,4 +109,5 @@ export const ReportContainer = ({ report, onWrite }) => {
       ) : null}
     </>
   );
+
 };

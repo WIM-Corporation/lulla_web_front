@@ -2,13 +2,14 @@ import AIAlbum from "@/components/App/Album/AIAlbum";
 import { ImageTag } from "@/service/album/ImageTag";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import useStores from "@/stores/useStores";
 
 export default function EditPage({}) {
   const router = useRouter();
   const [initImages, setInitImages] = useState(null);
   const initData = JSON.parse(router.query.initData);
   const [sourceTag,setSourceTag] = useState(null);
-
+  const { reportStore } = useStores();
   const reportId = router.query.reportId;
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export default function EditPage({}) {
         tags: result.medias[0].tags,
       })
       .then((res) => {
+        reportStore.setEditFlag(true);
         router.back();
       })
       .catch((err) => {
@@ -50,7 +52,6 @@ export default function EditPage({}) {
         <main>
           <AIAlbum
             memberId={initData.member_id}
-            onComplete={handleComplete}
             onComplete={(result) => updateTags(result)}
             onBack={() => router.back()}
             initImages={initImages}

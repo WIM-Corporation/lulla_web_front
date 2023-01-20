@@ -4,9 +4,14 @@
     font-size: 12px;
 }
 
-.select_all {
+.select_all_active {
     float: right;
     color: var(--teal-400-primary);
+}
+
+.select_all_inactive {
+    float: right;
+    color: var(--gray400);
 }
 
 .tag_item_list {

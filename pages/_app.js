@@ -9,6 +9,7 @@ import MobXStoresContext from "@/stores/MobXStoreContext.js";
 import globalStore from "@/stores/globalStore";
 import authStore from "@/stores/Auth";
 import joinStore from "@/stores/joinStore";
+import reportStore from '@/stores/reportStore';
 import { useState } from "react";
 import { useEffect } from "react";
 import Toast from "@/components/common/Toast";
@@ -46,6 +47,7 @@ export default function MyApp({ Component, pageProps }) {
     globalStore,
     // authStore,
     joinStore,
+    reportStore,
   };
 
   const [isSSR, setIsSSR] = useState(true);
