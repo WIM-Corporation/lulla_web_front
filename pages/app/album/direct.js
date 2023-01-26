@@ -38,7 +38,6 @@ export default function AlbumContainer() {
   const onComplete = (result) => {
     console.log("[handleComplete] 완료 : ", result);
     if (deviceType == "android") {
-      debugger
       window.app.complete(result);
     } else if (deviceType == "ios") {
       window.webkit.messageHandlers.complete.postMessage(result);
