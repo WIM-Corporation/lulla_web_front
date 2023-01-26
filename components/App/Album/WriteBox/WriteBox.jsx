@@ -1,6 +1,7 @@
 import { forwardRef, useCallback, useEffect, useState } from "react";
 import EmptyBox from "@/assets/imgs/empty_box.svg";
 import Image from "next/image";
+import useStores from "@/stores/useStores";
 const parseDate = (dateStr) => {
   if (!dateStr) return "";
 
@@ -21,14 +22,14 @@ const parseDate = (dateStr) => {
 };
 
 export const WriteBox = forwardRef(
-  ({ initText, onInput, reporter, onClick }, textRef) => {
+  ({ initText, onInput, reporter, onClick,btnText }, textRef) => {
     const [texts, setTexts] = useState(null);
-
+    const { reportStore } = useStores();
     const setHeight = (e) => {
       if (!e?.current || !initText) {
         return {};
       }
-      return { height: e.current.scrollHeight + "px" };
+      return { height: e.current.scrollHeight + 2 + "px" };
     };
 
     useEffect(() => {
@@ -96,7 +97,7 @@ export const WriteBox = forwardRef(
         {reporter ? (
           <div className="lower_btn" onClick={onClick}>
             {" "}
-            태그 수정{" "}
+              {reportStore.isEdited?"태그 재수정":"태그 수정"}{" "}
           </div>
         ) : null}
       </div>

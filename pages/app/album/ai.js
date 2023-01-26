@@ -54,6 +54,7 @@ export default function AlbumContainer() {
             onComplete={onComplete}
             onBack={onBack}
             deviceType={deviceType}
+            headTitle="태그 하기"
           />
         </main>
       ) : null}

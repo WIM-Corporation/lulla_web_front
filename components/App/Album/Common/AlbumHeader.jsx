@@ -33,7 +33,7 @@ export const AlbumHeaderComponent = ({
             <div className="lnb_tag">
               <div className="lnb_text">
                 <span className="title">{title}</span>
-                {infoBtn ? (
+                {title && infoBtn ? (
                   <>
                     <span
                       className="info_hover_container"

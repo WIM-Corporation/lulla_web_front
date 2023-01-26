@@ -227,7 +227,7 @@ export default function EditorView({
         class_name: initClassName || "-",
         bbox: new_bbox,
         by_user: initKid.by_user,
-        id: editTag.id || ""
+        id: editTag?.id || "",
       });
     } else {
       /* if existed tag > error? modify? */
