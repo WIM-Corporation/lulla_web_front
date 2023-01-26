@@ -31,7 +31,7 @@ export default function DirectAlbum({
         school_id: schoolId,
         class_id: classId,
         total_medias: totalMedias,
-        medias: mediaArray,
+        medias: mediaArray.map(media => ({...media,data:""})),
         deleted_medias_seq: []
       });
 
@@ -84,7 +84,7 @@ export default function DirectAlbum({
        Object.assign(newTagList,[],kidList.map(kid => ({
           ...kid,
           class_name: className || "-",
-          bbox: null,
+          bbox: [],
           by_user: false,
           id: "",
         })))
@@ -119,7 +119,7 @@ export default function DirectAlbum({
         kid_name: item.kid_name,
         class_id: item.class_id,
         class_name: className || "-",
-        bbox: null,
+        bbox: [],
         by_user: false,
         id: "",
       });

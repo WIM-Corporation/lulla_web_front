@@ -500,7 +500,7 @@ export default function AIAlbum({
         tag.bbox = tag.bbox.map((b) => parseInt(b));
         return tag;
       });
-      return image;
+      return ({...image, data:""});
     });
     const resultJsonStr = JSON.stringify({
       school_id: schoolId,
