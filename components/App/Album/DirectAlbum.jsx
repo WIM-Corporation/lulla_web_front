@@ -32,7 +32,7 @@ export default function DirectAlbum({
         class_id: classId,
         total_medias: totalMedias,
         medias: mediaArray,
-        deleted_medias_seq: null
+        deleted_medias_seq: []
       });
 
       onComplete(resultJsonStr);
