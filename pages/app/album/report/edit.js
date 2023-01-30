@@ -3,18 +3,23 @@ import { ImageTag } from "@/service/album/ImageTag";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useStores from "@/stores/useStores";
+import DirectAlbum from "@/components/App/Album/DirectAlbum";
+import qs from "qs";
 
 export default function EditPage({}) {
   const router = useRouter();
   const [initImages, setInitImages] = useState(null);
   const initData = JSON.parse(router.query.initData);
-  const [sourceTag,setSourceTag] = useState(null);
   const { reportStore } = useStores();
   const reportId = router.query.reportId;
+  const tagType = initData?.tag_type;
+  const deviceType =
+      qs.parse(location.search, { ignoreQueryPrefix: true })?.type || "web";
 
   useEffect(() => {
     //report to image
-    console.log("router", router.query);
+    console.log("initdata", initData);
+
     let imageData = new ImageTag();
     imageData.school_id = initData.school_id;
     imageData.class_id = initData.class_id;
@@ -50,15 +55,27 @@ export default function EditPage({}) {
     <div className="Wrap">
       {initImages ? (
         <main>
-          <AIAlbum
-            memberId={initData.member_id}
-            onComplete={(result) => updateTags(result)}
-            onBack={() => router.back()}
-            initImages={initImages}
-            backBtnType="x"
-            isErrorPage={true}
-            sourceTags={initData.media?.tags}
-          />
+          {tagType === 0
+            ? <AIAlbum
+              memberId={initData.member_id}
+              onComplete={(result) => updateTags(result)}
+              onBack={() => router.back()}
+              initImages={initImages}
+              backBtnType="x"
+              isErrorPage={true}
+              sourceTags={initData.media?.tags}
+            />
+          : tagType === 1
+            ? <DirectAlbum
+              initImages={initImages}
+              onComplete={(result) => updateTags(result)}
+              onBack={() => router.back()}
+              deviceType={deviceType}
+              backBtnType="x"
+            />
+          :null
+          }
+
         </main>
       ) : null}
     </div>
