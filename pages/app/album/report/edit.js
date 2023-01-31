@@ -33,7 +33,7 @@ export default function EditPage({}) {
     result = JSON.parse(result);
 
     console.log("[updateTags] ", result, " report_id ", reportId);
-    const reqBody = {...initData, tag_error_id: reportId, media:Object.assign([],result.medias)}
+    const reqBody = {...initData, tag_error_id:reportId, media:Object.assign([],result.medias)}
     axios
       .post("/api/v1/album/error/update", reqBody)
       .then((res) => {
@@ -42,7 +42,6 @@ export default function EditPage({}) {
       })
       .catch((err) => {
         alert("오류 수정 정보를 보내는데 문제가 발생하였습니다.");
-        alert(`error : ${err.message}`);
         console.log("[EditPage] error : ", err.message);
       });
   };
