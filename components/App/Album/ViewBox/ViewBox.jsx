@@ -97,13 +97,13 @@ export const ViewBox = ({
       }
       //image swipe
       touchendX = e.changedTouches[0].screenX;
-      if (touchendX < touchstartX && touchstartX - touchendX > 150) {
+      if (touchendX < touchstartX && touchstartX - touchendX > 100) {
         if (currentIdx + 1 < mediaArray.length) {
           setCurrentIdx(currentIdx + 1);
         } else if (mediaArray.length > 1) {
           alert("다음 이미지가 없습니다.");
         }
-      } else if (touchendX > touchstartX && touchendX - touchstartX > 150) {
+      } else if (touchendX > touchstartX && touchendX - touchstartX > 100) {
         if (currentIdx > 0) {
           setCurrentIdx(currentIdx - 1);
         } else if (mediaArray.length > 1) {

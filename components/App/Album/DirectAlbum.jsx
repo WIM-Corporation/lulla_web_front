@@ -22,6 +22,7 @@ export default function DirectAlbum({
   const [kidList, setKidList] = useState([]);
   const [totalMedias, setTotalMedias] = useState(null);
   const [cancelPopup, showCancelPopup] = useState(false);
+  const [cancelPopMsg,setCancelPopMsg] = useState("");
   const [width, setWidth] = useState(null);
   const [classList, setClassList] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -29,20 +30,30 @@ export default function DirectAlbum({
   const [sourceTags, setSourceTags] = useState(null);
   const [isEditTags, editTags] = useState(false)
 
-  const handleComplete = (e) => {
+  const handleComplete = (e, checkedSourceTags) => {
     if (onComplete) {
       const resultJsonStr = JSON.stringify({
         school_id: schoolId,
         class_id: classId,
         total_medias: totalMedias,
-        medias: mediaArray.map(media => ({...media,data:""})),
+        medias: mediaArray.map(media => ({...media, data:"", tags:media.tags.map(tag => ({...tag,bbox:[0,0,0,0]}))})),
         deleted_medias_seq: []
       });
 
-      onComplete(resultJsonStr);
+      if(!isErrorPage){
+        onComplete(resultJsonStr);
+      }else{
+        if(checkDeletedChild() || checkedSourceTags){
+          onComplete(resultJsonStr);
+        }else{
+          showWarnPopup();
+        }        
+      }
     }
   };
 
+  const checkDeletedChild = () => sourceTags.every(sourceTag => (mediaArray[0].tags.findIndex(targetTag => (sourceTag.kid_id === targetTag.kid_id)) === -1 ? false : true))
+  
   function getKidList(school_id, class_id) {
     let class_name = null;
     let kid_list = [];
@@ -182,6 +193,11 @@ export default function DirectAlbum({
     showCancelPopup(false)
   }
   const showWarnPopup = () => {
+    if(!isErrorPage){
+      setCancelPopMsg("모든 사진에 태그된 정보가 삭제됩니다.\n게시글 작성으로 돌아가시겠습니까?")
+    }else{
+      setCancelPopMsg("원아가 태그 되지 않은 사진은\n해당 보호자와 가족이 볼 수 없습니다.")
+    }
     showCancelPopup(true)
   }
   const activeConfirmBtn = (newTags) => {
@@ -226,9 +242,9 @@ export default function DirectAlbum({
           />
           <WarnPopup
             show={cancelPopup}
-            title={"모든 사진에 태그된 정보가 삭제됩니다.\n게시글 작성으로 돌아가시겠습니까?"}
+            title={cancelPopMsg}
             onClose={leaveWarnPopup}
-            onConfirm={onBack}
+            onConfirm={!isErrorPage ? onBack : () => handleComplete(null,true)}
           />
         </>
       )}
