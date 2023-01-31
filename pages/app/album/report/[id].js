@@ -96,8 +96,8 @@ export default function ReportPage() {
         />
         {
           !ready ? null :
-            report.current.output.tag_type === 0 ?
-              <ReportContainer report={report.current} /> : null
+//            report.current.output.tag_type === 0 ?
+              <ReportContainer report={report.current} />
         }
       </main>
     </div>

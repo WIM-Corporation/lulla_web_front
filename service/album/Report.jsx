@@ -37,6 +37,7 @@ Report.prototype = {
       created_at: value.created_at,
       is_confirmed: value.is_confirmed || false,
       tag_type: value.tag_type,
+      album_media_id: value.album_media_id || "",
     };
   },
 

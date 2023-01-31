@@ -31,15 +31,25 @@ export default function ReportCreatePage() {
     console.log("[sendError] report : ", reqBody);
 
     axios
-      .post("/api/v1/album/error/create", reqBody)
+      .post("/api/v1/album/detail", {id:reqBody.album_id,member_id:reqBody.member_id})
       .then((res) => {
-        back(deviceType);
+        let seq = reqBody.media[0].seq;
+        if(res?.album?.medias[seq]){
+            let album_media_id = res.album.medias[seq].id;
+            reqBody.album_media_id = album_media_id;
+            debugger
+            axios
+              .post("/api/v1/album/error/create", reqBody)
+              .then((res) => {
+                back(deviceType);
+              })
+              .catch((err) => {
+                alert(errMsg("오류 보내기에 문제가 발생하였습니다. ", err));
+                console.log("[getReport] error : ", err.message);
+                return false;
+              });
+        }
       })
-      .catch((err) => {
-        alert(errMsg("오류 보내기에 문제가 발생하였습니다. ", err));
-        console.log("[getReport] error : ", err.message);
-        return false;
-      });
   };
 
   const setImage = (dataStr) => {

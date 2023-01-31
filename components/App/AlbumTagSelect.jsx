@@ -11,6 +11,8 @@ export default function AlbumTagSelect({
   onClickKid,
   editMode,
   onClickAllKid,
+  isErrorPage,
+  activeConfirmBtn,
 }) {
   const [curTags, setCurTags] = useState([]);
   /* 원아 */
@@ -33,6 +35,9 @@ export default function AlbumTagSelect({
   useEffect(() => {
     console.log("currentIdx : ", currentIdx, imageListData[currentIdx].tags);
     setCurTags(Object.assign([],imageListData[currentIdx].tags));
+    if(isErrorPage && activeConfirmBtn){
+        activeConfirmBtn(imageListData[currentIdx].tags)
+    }
   }, [currentIdx, imageListData[currentIdx].tags]);
 
   useEffect(() => {
