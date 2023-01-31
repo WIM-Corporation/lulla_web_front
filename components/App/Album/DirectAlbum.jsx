@@ -12,6 +12,8 @@ export default function DirectAlbum({
   onComplete,
   onBack,
   deviceType, // TODO: redux / session storage
+  backBtnType,
+  isErrorPage,
 }) {
   const [mediaArray, setMediaArray] = useState([]);
   const [schoolId, setSchoolId] = useState(null);
@@ -23,7 +25,9 @@ export default function DirectAlbum({
   const [width, setWidth] = useState(null);
   const [classList, setClassList] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [selectedCnt,setSelectedCnt] = useState([])
+  const [selectedCnt,setSelectedCnt] = useState([]);
+  const [sourceTags, setSourceTags] = useState(null);
+  const [isEditTags, editTags] = useState(false)
 
   const handleComplete = (e) => {
     if (onComplete) {
@@ -73,6 +77,9 @@ export default function DirectAlbum({
     setClassId(data.class_id);
     setTotalMedias(data.total_medias);
     setMediaArray(data.medias);
+    if(isErrorPage){
+        setSourceTags(data.medias[0]?.tags);
+    }
     setSelectedCnt(new Array(data.total_medias).fill(0))
     getKidList(data.school_id, data.class_id)
   };
@@ -177,16 +184,23 @@ export default function DirectAlbum({
   const showWarnPopup = () => {
     showCancelPopup(true)
   }
-
+  const activeConfirmBtn = (newTags) => {
+    if(JSON.stringify(sourceTags) !== JSON.stringify(newTags)){
+      editTags(true)
+    }else{
+      editTags(false)
+    }
+  }
 
   return (
     <>
       <AlbumHeader
         onConfirm={handleComplete}
         title={"직접 태그"}
-        activeBtn={true}
+        activeBtn={!isErrorPage ?  true : isEditTags }
         onBackBtn={showWarnPopup}
         infoBtn
+        backBtnType={backBtnType}
       />
       {mediaArray && mediaArray.length > 0 && (
         <>
@@ -207,12 +221,14 @@ export default function DirectAlbum({
             currentIdx={currentIdx}
             onClickAllKid={handleClickAllBtn}
             editMode={false}
+            isErrorPage={isErrorPage}
+            activeConfirmBtn={activeConfirmBtn}
           />
           <WarnPopup
-              show={cancelPopup}
-              title={"모든 사진에 태그된 정보가 삭제됩니다.\n게시글 작성으로 돌아가시겠습니까?"}
-              onClose={leaveWarnPopup}
-              onConfirm={onBack}
+            show={cancelPopup}
+            title={"모든 사진에 태그된 정보가 삭제됩니다.\n게시글 작성으로 돌아가시겠습니까?"}
+            onClose={leaveWarnPopup}
+            onConfirm={onBack}
           />
         </>
       )}

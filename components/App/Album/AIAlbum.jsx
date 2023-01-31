@@ -422,7 +422,7 @@ export default function AIAlbum({
     window.backKey = function () {
       switch (actionLog.current) {
         case "aiTagging":
-          showCancelPop();
+          showCancelPop(!isErrorPage ? "모든 사진에 태그된 정보가 사라집니다" : "변경된 내용이 저장되지 않습니다.\n태그 수정을 그만하시겠습니까?");
           break;
         case "cancelPopup":
           leaveWarnPopup();
@@ -809,7 +809,7 @@ export default function AIAlbum({
               </div>
               <WarnPopup
                 show={cancelPopup}
-                title={cancelPopMsg}
+                title={cancelPopMsgRef.current}
                 onClose={leaveWarnPopup}
                 onConfirm={handleBackPress}
               />

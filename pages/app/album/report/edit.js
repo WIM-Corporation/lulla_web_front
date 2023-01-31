@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import useStores from "@/stores/useStores";
 import DirectAlbum from "@/components/App/Album/DirectAlbum";
 import qs from "qs";
+import axios from "axios";
 
 export default function EditPage({}) {
   const router = useRouter();
@@ -32,21 +33,16 @@ export default function EditPage({}) {
     result = JSON.parse(result);
 
     console.log("[updateTags] ", result, " report_id ", reportId);
+    const reqBody = {...initData, tag_error_id: reportId, media:Object.assign([],result.medias)}
     axios
-      .post("/api/v1/album/error/update", {
-        member_id: initData.member_id,
-        tag_error_id: reportId,
-        media_width: result.medias[0].width,
-        media_height: result.medias[0].height,
-        delete_tags: result.medias[0].delete_tags || [],
-        tags: result.medias[0].tags,
-      })
+      .post("/api/v1/album/error/update", reqBody)
       .then((res) => {
         reportStore.setEditFlag(true);
         router.back();
       })
       .catch((err) => {
         alert("오류 수정 정보를 보내는데 문제가 발생하였습니다.");
+        alert(`error : ${err.message}`);
         console.log("[EditPage] error : ", err.message);
       });
   };
@@ -63,7 +59,6 @@ export default function EditPage({}) {
               initImages={initImages}
               backBtnType="x"
               isErrorPage={true}
-              sourceTags={initData.media?.tags}
             />
           : tagType === 1
             ? <DirectAlbum
@@ -72,6 +67,7 @@ export default function EditPage({}) {
               onBack={() => router.back()}
               deviceType={deviceType}
               backBtnType="x"
+              isErrorPage={true}
             />
           :null
           }
