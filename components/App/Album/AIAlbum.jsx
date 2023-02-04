@@ -64,12 +64,7 @@ export default function AIAlbum({
   const editTagRef = useRef(null);
 
   // const [returnData, setReturnData] = useState([]); // window.appReturnData 로 이동
-  const touchTimerRef = useRef({
-    now: null,
-    timerId: null,
-    interval: 10,
-    triggerTime: 2500,
-  });
+  const touchTimerRef = useRef(null);
 
   const [drawTag, setDrawTag, drawTagRef] = useState(false);
 
@@ -530,41 +525,35 @@ export default function AIAlbum({
     if (!isEditMode && !isErrorPage && !loading && img && imgSrc) {
       touchstartX = e.changedTouches[0].screenX; //image swipe
 
-      touchTimerRef.current.timerId = setInterval(() => {
-        e.preventDefault();
+      touchTimerRef.current = setInterval(() => {
         //long touch
-        console.log(`now : ${touchTimerRef.current.now}`)
-        if (touchTimerRef.current.now > touchTimerRef.current.triggerTime) {
-          if (imageArray.length > 1) {
-            setDeletePopup(true);
-            touchTimerRef.current.now = 0;
-            clearInterval(touchTimerRef.current.timerId);
-            actionLog.current = "deletePopup";
-          }
-        } else {
-          touchTimerRef.current.now =
-            touchTimerRef.current.now + touchTimerRef.current.interval;
-        }
-      }, 1);
+        setDeletePopup(true);
+        clearInterval(touchTimerRef.current);
+        touchTimerRef.current = null;
+        actionLog.current = "deletePopup";
+      }, 1500);
     }
   };
 
   const setTouchEnd = (e) => {
     if (!isEditMode && !isErrorPage && !loading && img && imgSrc) {
-      if (touchTimerRef.current.timerId) {
+      if (touchTimerRef.current) {
         //long touch
-        clearInterval(touchTimerRef.current.timerId);
-        touchTimerRef.current.now = 0;
+        clearInterval(touchTimerRef.current);
+        touchTimerRef.current = null;
+      }
+      if(deletePopup){
+        return;
       }
       //image swipe
       touchendX = e.changedTouches[0].screenX;
-      if (touchendX < touchstartX && touchstartX - touchendX > 150) {
+      if (touchendX < touchstartX && touchstartX - touchendX > 100) {
         if (currentIdx + 1 < imageArray.length) {
           return changeImg(currentIdx + 1);
         } else if (imageArray.length > 1) {
           alert("다음 이미지가 없습니다.");
         }
-      } else if (touchendX > touchstartX && touchendX - touchstartX > 150) {
+      } else if (touchendX > touchstartX && touchendX - touchstartX > 100) {
         if (currentIdx > 0) {
           return changeImg(currentIdx - 1);
         } else if (imageArray.length > 1) {
@@ -677,7 +666,7 @@ export default function AIAlbum({
   };
 
   const leaveDeletePopup = () => {
-    clearInterval(touchTimerRef.current.timerId);
+    clearInterval(touchTimerRef.current);
     setDeletePopup(false);
     actionLog.current = "aiTagging";
   };
