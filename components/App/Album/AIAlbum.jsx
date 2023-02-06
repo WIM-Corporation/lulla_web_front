@@ -457,7 +457,7 @@ export default function AIAlbum({
         };
         if (newImageArray[currentIdx].tags[i].kid_id) {
           const findIndex = newImageArray[currentIdx].tags.findIndex(
-            (ti) => ti && ti.kid_id == tags[i].kid_id
+            (ti) => ti && JSON.stringify(ti.bbox) == JSON.stringify(tags[i].bbox)
           );
           if (findIndex < 0) {
             // kid_id로 중복 체크
