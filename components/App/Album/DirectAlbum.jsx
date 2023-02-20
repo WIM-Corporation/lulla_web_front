@@ -23,6 +23,7 @@ export default function DirectAlbum({
   const [totalMedias, setTotalMedias] = useState(null);
   const [cancelPopup, showCancelPopup] = useState(false);
   const [cancelPopMsg,setCancelPopMsg] = useState("");
+  const [cancelPopFrom, setCancelPopFrom] = useState("");
   const [width, setWidth] = useState(null);
   const [classList, setClassList] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -43,16 +44,14 @@ export default function DirectAlbum({
       if(!isErrorPage){
         onComplete(resultJsonStr);
       }else{
-        if(checkDeletedChild() || checkedSourceTags){
+        if(mediaArray[0].tags.length > 0 || checkedSourceTags){
           onComplete(resultJsonStr);
         }else{
-          showWarnPopup();
+          showWarnPopup('onConfirm');
         }        
       }
     }
   };
-
-  const checkDeletedChild = () => sourceTags.every(sourceTag => (mediaArray[0].tags.findIndex(targetTag => (sourceTag.kid_id === targetTag.kid_id)) === -1 ? false : true))
   
   function getKidList(school_id, class_id) {
     let class_name = null;
@@ -192,11 +191,16 @@ export default function DirectAlbum({
   const leaveWarnPopup = () => {
     showCancelPopup(false)
   }
-  const showWarnPopup = () => {
+  const showWarnPopup = (from) => {
     if(!isErrorPage){
       setCancelPopMsg("모든 사진에 태그된 정보가 삭제됩니다.\n게시글 작성으로 돌아가시겠습니까?")
     }else{
-      setCancelPopMsg("원아가 태그 되지 않은 사진은\n해당 보호자와 가족이 볼 수 없습니다.")
+      if(from === 'onBack'){
+        setCancelPopMsg("모든 사진에 태그된 정보가 삭제됩니다.\n게시글 작성으로 돌아가시겠습니까?")  
+      }else{
+        setCancelPopMsg("원아가 태그 되지 않은 사진은\n해당 보호자와 가족이 볼 수 없습니다.")
+      }
+      setCancelPopFrom(from)
     }
     showCancelPopup(true)
   }
@@ -214,7 +218,7 @@ export default function DirectAlbum({
         onConfirm={handleComplete}
         title={"직접 태그"}
         activeBtn={!isErrorPage ?  true : isEditTags }
-        onBackBtn={showWarnPopup}
+        onBackBtn={() => showWarnPopup(isErrorPage && 'onBack')}
         infoBtn
         backBtnType={backBtnType}
       />
@@ -244,7 +248,7 @@ export default function DirectAlbum({
             show={cancelPopup}
             title={cancelPopMsg}
             onClose={leaveWarnPopup}
-            onConfirm={!isErrorPage ? onBack : () => handleComplete(null,true)}
+            onConfirm={!isErrorPage ? onBack : cancelPopFrom === 'onBack' ? onBack : () => handleComplete(null,true)}
           />
         </>
       )}
