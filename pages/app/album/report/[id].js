@@ -31,6 +31,7 @@ export default function ReportPage() {
     axios
       .post("/api/v1/album/error", { member_id, tag_error_id })
       .then((res) => {
+        debugger
         if (typeof res.tag_error?.school_id === undefined) {
           throw new Error("유치원 정보가 필요합니다.");
         }
@@ -60,6 +61,9 @@ export default function ReportPage() {
         res.tag_error.media = res.tag_error.media[0];
         report.current.init = res.tag_error;
         report.current.setReporter = res.rsMember;
+        if(reportStore.errorEditedTags){
+          report.current.output.media.tags = JSON.parse(reportStore.errorEditedTags)
+        }
         console.log("report : ", report.current);
         setReady(true);
       })
@@ -84,6 +88,7 @@ export default function ReportPage() {
     setTimeout(() => clearInterval(_initWait), 5000);
     return () => {
         reportStore.setEditFlag(false);
+        reportStore.setErrorEditedTags(null);
     }
   }, []);
 

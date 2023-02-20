@@ -71,6 +71,7 @@ export default function AIAlbum({
   //popup
   const [cancelPopup, showCancelPopup, cancelPopupRef] = useState(false);
   const [cancelPopMsg, setCancelPopMsg, cancelPopMsgRef] = useState("")
+  const [cancelPopFrom, setCancelPopFrom, cancelPopFromRef] = useState("");
   const [deletePopup, setDeletePopup, deletePopupRef] = useState(false);
 
   //auth
@@ -417,7 +418,7 @@ export default function AIAlbum({
     window.backKey = function () {
       switch (actionLog.current) {
         case "aiTagging":
-          showCancelPop(!isErrorPage ? "모든 사진에 태그된 정보가 사라집니다.\n게시글 작성으로 돌아가시겠습니까?" : "변경된 내용이 저장되지 않습니다.\n태그 수정을 그만하시겠습니까?");
+          showCancelPop(!isErrorPage ? "모든 사진에 태그된 정보가 사라집니다.\n게시글 작성으로 돌아가시겠습니까?" : "변경된 내용이 저장되지 않습니다.\n태그 수정을 그만하시겠습니까?", isErrorPage && 'onBack');
           break;
         case "cancelPopup":
           leaveWarnPopup();
@@ -508,15 +509,15 @@ export default function AIAlbum({
     if(!isErrorPage){
       onComplete(resultJsonStr);
     }else{
-      if(checkDeletedChild() || checkedSourceTags){
+      if(imageArray[0].tags.length> 0 || checkedSourceTags){
         onComplete(resultJsonStr);
       }else{
-        showCancelPop("원아가 태그 되지 않은 사진은\n해당 보호자와 가족이 볼 수 없습니다.");
+        showCancelPop("원아가 태그 되지 않은 사진은\n해당 보호자와 가족이 볼 수 없습니다.",'onConfirm');
       }        
     }
   };
 
-  const checkDeletedChild = () => sourceTags.every(sourceTag => (imageArray[0].tags.findIndex(targetTag => (sourceTag.kid_id === targetTag.kid_id)) === -1 ? false : true))
+  
   /* Swipe Events for view box */
   let touchstartX = 0;
   let touchendX = 0;
@@ -659,9 +660,10 @@ export default function AIAlbum({
     actionLog.current = "aiTagging";
   };
 
-  const showCancelPop = (message) => {
+  const showCancelPop = (message,from) => {
     showCancelPopup(true);
     setCancelPopMsg(message);
+    setCancelPopFrom(from);
     actionLog.current = "cancelPopup";
   };
 
@@ -747,7 +749,7 @@ export default function AIAlbum({
                 onConfirm={handleComplete}
                 title={headTitle}
                 activeBtn={!isErrorPage ?  isTagComplete : isEditTags }
-                onBackBtn={() => showCancelPop(!isErrorPage ? "모든 사진에 태그된 정보가 사라집니다.\n게시글 작성으로 돌아가시겠습니까?" : "변경된 내용이 저장되지 않습니다.\n태그 수정을 그만하시겠습니까?")}        
+                onBackBtn={() => showCancelPop(!isErrorPage ? "모든 사진에 태그된 정보가 사라집니다.\n게시글 작성으로 돌아가시겠습니까?" : "변경된 내용이 저장되지 않습니다.\n태그 수정을 그만하시겠습니까?", isErrorPage && 'onBack')}        
                 infoBtn={true}
                 backBtnType={backBtnType}
               />
@@ -806,7 +808,7 @@ export default function AIAlbum({
                 show={cancelPopup}
                 title={cancelPopMsgRef.current}
                 onClose={leaveWarnPopup}
-                onConfirm={!isErrorPage ? handleBackPress : () => handleComplete(null,true)}
+                onConfirm={!isErrorPage ? handleBackPress : cancelPopFrom === 'onBack' ? handleBackPress : () => handleComplete(null, true)}
               />
               {SimplePopup(deletePopup, leaveDeletePopup, deleteCurrentImg)}
               <style jsx>

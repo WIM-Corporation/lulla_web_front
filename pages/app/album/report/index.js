@@ -37,7 +37,6 @@ export default function ReportCreatePage() {
         if(res?.album?.medias[seq]){
             let album_media_id = res.album.medias[seq].id;
             reqBody.album_media_id = album_media_id;
-            debugger
             axios
               .post("/api/v1/album/error/create", reqBody)
               .then((res) => {

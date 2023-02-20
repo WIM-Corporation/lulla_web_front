@@ -22,6 +22,7 @@ export default function DirectAlbum({
   const [kidList, setKidList] = useState([]);
   const [totalMedias, setTotalMedias] = useState(null);
   const [cancelPopup, showCancelPopup] = useState(false);
+  const [cancelPopFrom, setCancelPopFrom] = useState("");
   const [cancelPopMsg, setCancelPopMsg] = useState("");
   const [width, setWidth] = useState(null);
   const [classList, setClassList] = useState([]);
@@ -46,24 +47,15 @@ export default function DirectAlbum({
 
       if (!isErrorPage) {
         onComplete(resultJsonStr);
-      } else {
-        if (checkDeletedChild() || checkedSourceTags) {
+      }else{
+        if(mediaArray[0].tags.length > 0 || checkedSourceTags){
           onComplete(resultJsonStr);
-        } else {
-          showWarnPopup();
-        }
+        }else{
+          showWarnPopup('onConfirm');
+        }        
       }
     }
   };
-
-  const checkDeletedChild = () =>
-    sourceTags.every((sourceTag) =>
-      mediaArray[0].tags.findIndex(
-        (targetTag) => sourceTag.kid_id === targetTag.kid_id
-      ) === -1
-        ? false
-        : true
-    );
 
   function getKidList(school_id, class_id) {
     let class_name = null;
@@ -205,17 +197,18 @@ export default function DirectAlbum({
   }, []);
 
   const leaveWarnPopup = () => {
-    showCancelPopup(false);
-  };
-  const showWarnPopup = () => {
-    if (!isErrorPage) {
-      setCancelPopMsg(
-        "모든 사진에 태그된 정보가 삭제됩니다.\n게시글 작성으로 돌아가시겠습니까?"
-      );
-    } else {
-      setCancelPopMsg(
-        "원아가 태그 되지 않은 사진은\n해당 보호자와 가족이 볼 수 없습니다."
-      );
+    showCancelPopup(false)
+  }
+  const showWarnPopup = (from) => {
+    if(!isErrorPage){
+      setCancelPopMsg("모든 사진에 태그된 정보가 삭제됩니다.\n게시글 작성으로 돌아가시겠습니까?")
+    }else{
+      if(from === 'onBack'){
+        setCancelPopMsg("모든 사진에 태그된 정보가 삭제됩니다.\n게시글 작성으로 돌아가시겠습니까?")  
+      }else{
+        setCancelPopMsg("원아가 태그 되지 않은 사진은\n해당 보호자와 가족이 볼 수 없습니다.")
+      }
+      setCancelPopFrom(from)
     }
     showCancelPopup(true);
   };
@@ -232,8 +225,8 @@ export default function DirectAlbum({
       <AlbumHeader
         onConfirm={handleComplete}
         title={"직접 태그"}
-        activeBtn={!isErrorPage ? true : isEditTags}
-        onBackBtn={showWarnPopup}
+        activeBtn={!isErrorPage ?  true : isEditTags }
+        onBackBtn={() => showWarnPopup(isErrorPage && 'onBack')}
         infoBtn
         backBtnType={backBtnType}
       />
@@ -244,10 +237,6 @@ export default function DirectAlbum({
             total={totalMedias}
             currentIdx={currentIdx}
             setCurrentIdx={setCurrentIdx}
-            openModal={(type) => {
-              if (type == "delete")
-                alert("삭제 기능은 직접 태그에서는 지원되지 않습니다.");
-            }}
           />
           <AlbumTagSelect
             kidList={kidList}
@@ -263,7 +252,7 @@ export default function DirectAlbum({
             show={cancelPopup}
             title={cancelPopMsg}
             onClose={leaveWarnPopup}
-            onConfirm={!isErrorPage ? onBack : () => handleComplete(null, true)}
+            onConfirm={!isErrorPage ? onBack : cancelPopFrom === 'onBack' ? onBack : () => handleComplete(null,true)}
           />
         </>
       )}
