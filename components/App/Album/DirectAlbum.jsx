@@ -229,10 +229,6 @@ export default function DirectAlbum({
             total={totalMedias}
             currentIdx={currentIdx}
             setCurrentIdx={setCurrentIdx}
-            openModal={(type) => {
-              if (type == "delete")
-                alert("삭제 기능은 직접 태그에서는 지원되지 않습니다.");
-            }}
           />
           <AlbumTagSelect
             kidList={kidList}
