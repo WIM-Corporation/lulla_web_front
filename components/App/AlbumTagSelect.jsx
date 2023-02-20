@@ -26,7 +26,7 @@ export default function AlbumTagSelect({
   };
 
   const checkSelectCnt = () => {
-    return kidList.length > 0 && imageListData[currentIdx].tags.length === kidList.length ? true : false
+    return kidList?.length > 0 && imageListData[currentIdx]?.tags?.length === kidList?.length ? true : false
   }
 
   const handleAllSelectBtn = () => {

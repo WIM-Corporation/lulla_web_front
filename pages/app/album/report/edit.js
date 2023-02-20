@@ -34,10 +34,12 @@ export default function EditPage({}) {
 
     console.log("[updateTags] ", result, " report_id ", reportId);
     const reqBody = {...initData, tag_error_id:reportId, media:Object.assign([],result.medias)}
+    const newTags = result.medias[0].tags;
     axios
       .post("/api/v1/album/error/update", reqBody)
       .then((res) => {
         reportStore.setEditFlag(true);
+        reportStore.setErrorEditedTags(JSON.stringify(newTags));
         router.back();
       })
       .catch((err) => {
