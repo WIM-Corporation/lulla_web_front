@@ -29,21 +29,21 @@ export default function AlbumTagSelect({
     return kidList?.length > 0 && imageListData[currentIdx]?.tags?.length === kidList?.length ? true : false
   }
 
+
   const handleAllSelectBtn = () => {
-    onClickAllKid(!checkSelectCnt())
-  }
+    onClickAllKid(!checkSelectCnt());
+  };
   useEffect(() => {
     console.log("currentIdx : ", currentIdx, imageListData[currentIdx].tags);
-    setCurTags(Object.assign([],imageListData[currentIdx].tags));
-    if(isErrorPage && activeConfirmBtn){
-        activeConfirmBtn(imageListData[currentIdx].tags)
+    setCurTags(Object.assign([], imageListData[currentIdx].tags));
+    if (isErrorPage && activeConfirmBtn) {
+      activeConfirmBtn(imageListData[currentIdx].tags);
     }
   }, [currentIdx, imageListData[currentIdx].tags]);
 
   useEffect(() => {
     console.log(kidList);
   }, []);
-
 
   return (
     <div style={{ minHeight: "100px" }}>
@@ -55,10 +55,20 @@ export default function AlbumTagSelect({
           <span className="tag_num">
             {imageListData && imageListData.length > 0 && checkSelectCnt()
               ? "개별 해제가 가능합니다."
-              : `${imageListData[currentIdx]?.tags?.length} 명이 선택되었습니다.`
-            }
+              : `${
+                  imageListData[currentIdx]?.tags?.length || 0
+                } 명이 선택되었습니다.`}
           </span>
-          <span className={checkSelectCnt() ? styles.select_all_active : styles.select_all_inactive} onClick={handleAllSelectBtn}>전체선택</span>
+          <span
+            className={
+              checkSelectCnt()
+                ? styles.select_all_active
+                : styles.select_all_inactive
+            }
+            onClick={handleAllSelectBtn}
+          >
+            전체선택
+          </span>
         </div>
       ) : null}
 

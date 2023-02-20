@@ -22,14 +22,14 @@ export default function DirectAlbum({
   const [kidList, setKidList] = useState([]);
   const [totalMedias, setTotalMedias] = useState(null);
   const [cancelPopup, showCancelPopup] = useState(false);
-  const [cancelPopMsg,setCancelPopMsg] = useState("");
   const [cancelPopFrom, setCancelPopFrom] = useState("");
+  const [cancelPopMsg, setCancelPopMsg] = useState("");
   const [width, setWidth] = useState(null);
   const [classList, setClassList] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [selectedCnt,setSelectedCnt] = useState([]);
+  const [selectedCnt, setSelectedCnt] = useState([]);
   const [sourceTags, setSourceTags] = useState(null);
-  const [isEditTags, editTags] = useState(false)
+  const [isEditTags, editTags] = useState(false);
 
   const handleComplete = (e, checkedSourceTags) => {
     if (onComplete) {
@@ -37,11 +37,15 @@ export default function DirectAlbum({
         school_id: schoolId,
         class_id: classId,
         total_medias: totalMedias,
-        medias: mediaArray.map(media => ({...media, data:"", tags:media.tags.map(tag => ({...tag,bbox:[0,0,0,0]}))})),
-        deleted_medias_seq: []
+        medias: mediaArray.map((media) => ({
+          ...media,
+          data: "",
+          tags: media.tags.map((tag) => ({ ...tag, bbox: [0, 0, 0, 0] })),
+        })),
+        deleted_medias_seq: [],
       });
 
-      if(!isErrorPage){
+      if (!isErrorPage) {
         onComplete(resultJsonStr);
       }else{
         if(mediaArray[0].tags.length > 0 || checkedSourceTags){
@@ -52,7 +56,7 @@ export default function DirectAlbum({
       }
     }
   };
-  
+
   function getKidList(school_id, class_id) {
     let class_name = null;
     let kid_list = [];
@@ -87,40 +91,44 @@ export default function DirectAlbum({
     setClassId(data.class_id);
     setTotalMedias(data.total_medias);
     setMediaArray(data.medias);
-    if(isErrorPage){
-        setSourceTags(data.medias[0]?.tags);
+    if (isErrorPage) {
+      setSourceTags(data.medias[0]?.tags);
     }
-    setSelectedCnt(new Array(data.total_medias).fill(0))
-    getKidList(data.school_id, data.class_id)
+    setSelectedCnt(new Array(data.total_medias).fill(0));
+    getKidList(data.school_id, data.class_id);
   };
 
   const handleClickAllBtn = (flag) => {
     const newMediaArray = mediaArray;
     const newTagList = [];
-    if(flag){
-       Object.assign(newTagList,[],kidList.map(kid => ({
+    if (flag) {
+      Object.assign(
+        newTagList,
+        [],
+        kidList.map((kid) => ({
           ...kid,
           class_name: className || "-",
           bbox: [],
           by_user: false,
           id: "",
-        })))
+        }))
+      );
     }
     newMediaArray[currentIdx].tags = newTagList;
-    setMediaArray(Object.assign([],newMediaArray));
-  }
+    setMediaArray(Object.assign([], newMediaArray));
+  };
   const handleSelectKid = (e) => {
     e.stopPropagation();
-    console.log('selected')
+    console.log("selected");
     const tagIdx = e.target.getAttribute("data-tag-idx"); // TODO 유효성 검사?
     const item = kidList[tagIdx];
 
-    const curImage = mediaArray[currentIdx];
-    const newTagList = [...curImage.tags];
+    const curImageTag = mediaArray[currentIdx]?.tags || [];
+    const newTagList = [...curImageTag];
 
     /* check new kid tag */
     const idx = newTagList.findIndex(
-        (tagItem) => tagItem.kid_id == item.kid_id
+      (tagItem) => tagItem.kid_id == item.kid_id
     );
 
     e.target.parentElement.style.transition = "all ease 1s";
@@ -150,7 +158,7 @@ export default function DirectAlbum({
     e.target.parentElement.setAttribute("data-selected", selected);
     const newMediaArray = mediaArray;
     newMediaArray[currentIdx].tags = newTagList;
-    setMediaArray(Object.assign([],newMediaArray));
+    setMediaArray(Object.assign([], newMediaArray));
   };
 
   const setImages = (dataStr) => {
@@ -202,15 +210,15 @@ export default function DirectAlbum({
       }
       setCancelPopFrom(from)
     }
-    showCancelPopup(true)
-  }
+    showCancelPopup(true);
+  };
   const activeConfirmBtn = (newTags) => {
-    if(JSON.stringify(sourceTags) !== JSON.stringify(newTags)){
-      editTags(true)
-    }else{
-      editTags(false)
+    if (JSON.stringify(sourceTags) !== JSON.stringify(newTags)) {
+      editTags(true);
+    } else {
+      editTags(false);
     }
-  }
+  };
 
   return (
     <>
