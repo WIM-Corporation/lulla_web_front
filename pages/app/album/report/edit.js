@@ -39,6 +39,13 @@ export default function EditPage({}) {
       .post("/api/v1/album/error/update", reqBody)
       .then((res) => {
         reportStore.setEditFlag(true);
+        // 현재시간?
+        var updated_at = res?.tag_error?.updated_at;
+        if(!updated_at || typeof updated_at != "string"){
+          updated_at = new Date().toISOString();
+        }
+        console.log("updated_at ", updated_at);
+        reportStore.setEditedTime(updated_at);
         reportStore.setErrorEditedTags(JSON.stringify(newTags));
         router.back();
       })

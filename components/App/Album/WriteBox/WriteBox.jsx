@@ -5,6 +5,8 @@ import ClearIcon from "@/assets/imgs/close_circle_fill_gray.svg";
 import Image from "next/image";
 import useStores from "@/stores/useStores";
 const parseDate = (dateStr) => {
+
+  console.log("!!!", dateStr);
   if (!dateStr) return "";
 
   let date = new Date(dateStr);
@@ -115,9 +117,8 @@ export const WriteBox = forwardRef(
             }}
             disabled={initText ? true : false}
             style={setWidthHeight(textRef)}
-          >
-            {initText}
-          </textarea>
+            defaultValue={initText}
+          ></textarea>
           {!initText && texts && texts.length > 0 && (
             <span className="clear_icon">
               <Image
@@ -131,10 +132,15 @@ export const WriteBox = forwardRef(
           )}
         </div>
         {reporter ? (
-          <div className="lower_btn" onClick={onClick}>
-            {" "}
-            {reportStore.isEdited ? "태그 재수정" : "태그 수정"}{" "}
-          </div>
+          <>
+            <div className="lower_btn" onClick={onClick}>
+              {" "}
+              {reportStore.isEdited ? "태그 재수정" : "태그 수정"}{" "}
+            </div>
+            {reportStore.isEdited ? (
+              <span style={{fontSize: "12px", color:"#9f9f9f"}}> { "태그 수정 | " + parseDate(reportStore.editedTime)}</span>
+            ) : null}
+          </>
         ) : null}
       </div>
     );

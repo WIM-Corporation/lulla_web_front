@@ -88,6 +88,7 @@ export default function ReportPage() {
     setTimeout(() => clearInterval(_initWait), 5000);
     return () => {
         reportStore.setEditFlag(false);
+        reportStore.setEditedTime("");
         reportStore.setErrorEditedTags(null);
     }
   }, []);
