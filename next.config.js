@@ -13,11 +13,11 @@ module.exports = {
       : [
           {
             source: "/api/file/:path*",
-            destination: "https://dev.lulla.co.kr/api/file/:path*",
+            destination: "https://web-lulla.wimcorp.dev/api/file/:path*",
           },
           {
             source: "/api/v1/:path*",
-            destination: "https://dev.lulla.co.kr/api/v1/:path*",
+            destination: "https://web-lulla.wimcorp.dev/api/v1/:path*",
           },
           {
             source: "/api/predict_v1_base",
