@@ -1,6 +1,6 @@
 ## Lulla Web 
 This is a Lulla web version project.
-https://web.lulla.co.kr
+https://web-lulla.wimcorp.dev
 
 
 ## Menu UI
